@@ -1,8 +1,16 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { mount, configure } from 'enzyme';
+import Adaptor from 'enzyme-adapter-react-16';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+configure({ adapter: new Adaptor() });
+describe('App', () => {
+  function sutFactory() {
+    return mount(<App />);
+  }
+  it('renders the app', () => {
+    const sut = sutFactory();
+    expect(sut.find(App).exists()).toBeTruthy();
+    sut.unmount();
+  });
 });
