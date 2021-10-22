@@ -1,13 +1,25 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AddSongForm from './components/AddSongForm';
 import SongTable from './components/SongTable';
+import SongDetails from './components/SongDetails';
 
+// TODO The SongTable should eventually be a /songs or something
 function App() {
   return (
     <div className="App">
-      <AddSongForm />
-      <SongTable />
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <SongTable />
+          </Route>
+          <Route path="/songs/add">
+            <AddSongForm />
+          </Route>
+          <Route path="/songs/:id" component={SongDetails} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
