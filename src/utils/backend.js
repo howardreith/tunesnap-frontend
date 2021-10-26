@@ -40,6 +40,16 @@ export async function getSongs() {
   throw Error('getSongs was unsuccessful');
 }
 
+export async function seedDb() {
+  const result = await fetch(`${backendUrl}/admin/seedDb`, {
+    method: 'get',
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('seedDb was unsuccessful');
+}
+
 export async function getSongAtId(id) {
   const result = await fetch(`${backendUrl}/songs/${id}`, {
     method: 'get',

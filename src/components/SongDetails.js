@@ -73,7 +73,6 @@ class SongDetails extends Component {
 
   render() {
     const {song} = this.state;
-    console.log('===> songs', song);
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
