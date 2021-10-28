@@ -40,6 +40,27 @@ export async function getSongs() {
   throw Error('getSongs was unsuccessful');
 }
 
+export async function getSongAtId(id) {
+  const result = await fetch(`${backendUrl}/songs/${id}`, {
+    method: 'get',
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`getSongAtId ${id} was unsuccessful`);
+}
+
+export async function getSongViaAutocomplete(queryString) {
+  const result = await fetch(`${backendUrl}/songs/search/${queryString}`, {
+    method: 'get',
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`getSongViaAutocomplete ${queryString} was unsuccessful`);
+}
+
+
 export async function seedDb() {
   const result = await fetch(`${backendUrl}/admin/seedDb`, {
     method: 'get',
@@ -50,12 +71,22 @@ export async function seedDb() {
   throw Error('seedDb was unsuccessful');
 }
 
-export async function getSongAtId(id) {
-  const result = await fetch(`${backendUrl}/songs/${id}`, {
+export async function getSongTitles() {
+  const result = await fetch(`${backendUrl}/admin/getSongTitles`, {
     method: 'get',
   });
   if (result.ok) {
     return result.json();
   }
-  throw Error(`getSongAtId ${id} was unsuccessful`);
+  throw Error('getSongTitles was unsuccessful');
+}
+
+export async function pruneSongs() {
+  const result = await fetch(`${backendUrl}/admin/pruneSongs`, {
+    method: 'get',
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('pruneSongs was unsuccessful');
 }

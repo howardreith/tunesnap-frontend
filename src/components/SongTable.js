@@ -1,9 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import * as PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { getSongs } from '../utils/backend';
+import { getSongViaAutocomplete } from '../utils/backend';
 import { HistoryPropType } from '../utils/propTypes';
 
 class SongTable extends Component {
@@ -11,13 +9,12 @@ class SongTable extends Component {
     super(props);
 
     this.handleSeeMoreClick = this.handleSeeMoreClick.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.goToNextPage = this.goToNextPage.bind(this);
+    this.goToPreviousPage = this.goToPreviousPage.bind(this);
 
-    this.state = { songs: [] };
-  }
-
-  async componentDidMount() {
-    const songs = (await getSongs()).data;
-    this.setState({ songs });
+    this.state = { songs: [], searchValue: '', page: 0 };
+    this.songs = [];
   }
 
   handleSeeMoreClick(e) {
@@ -27,11 +24,45 @@ class SongTable extends Component {
     push(`/songs/${songId}`);
   }
 
+  async handleSearchChange(e) {
+    const { value } = e.target;
+    this.setState({ searchValue: value });
+    if (value) {
+      this.songs = (await getSongViaAutocomplete(value)).data;
+      this.setState({ songs: this.songs.slice(0, 20), page: 0 });
+    } else {
+      this.setState({ songs: [] });
+    }
+  }
+
+  goToNextPage() {
+    const { page } = this.state;
+    const minIndex = (page + 1) * 20;
+    const maxIndex = (page + 2) * 20;
+    this.setState((state) => ({
+      ...state,
+      page: state.page + 1,
+      songs: this.songs.slice(minIndex, maxIndex),
+    }));
+  }
+
+  goToPreviousPage() {
+    const { page } = this.state;
+    const minIndex = (page - 1) * 20;
+    const maxIndex = page * 20;
+    this.setState((state) => ({
+      ...state,
+      page: state.page - 1,
+      songs: this.songs.slice(minIndex, maxIndex),
+    }));
+  }
+
   render() {
-    const { songs } = this.state;
+    const { songs, searchValue, page } = this.state;
     return (
       <div>
         <h1>Songs</h1>
+        <input onChange={this.handleSearchChange} value={searchValue} />
         <table>
           <thead>
             <tr>
@@ -54,6 +85,8 @@ class SongTable extends Component {
             ))}
           </tbody>
         </table>
+        {page > 0 && <button type="button" onClick={this.goToPreviousPage}>Previous Page</button>}
+        {(page + 1) * 20 < this.songs.length && <button type="button" onClick={this.goToNextPage}>Next Page</button>}
       </div>
     );
   }
