@@ -1,10 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {withRouter} from 'react-router-dom';
-import {createSong, getSongAtId} from '../utils/backend';
-import {HistoryPropType, MatchPropType} from '../utils/propTypes';
+import { withRouter } from 'react-router-dom';
+import { createSong, getSongAtId } from '../utils/backend';
+import { HistoryPropType, MatchPropType } from '../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
 
 export const StyledChatRoom = styled.div`
@@ -43,13 +43,13 @@ class SongDetails extends Component {
     this.fetchSongData = this.fetchSongData.bind(this);
     this.updateSong = this.updateSong.bind(this);
 
-    this.state = {song: null};
+    this.state = { song: null };
   }
 
   async componentDidMount() {
-    const {match, history} = this.props;
-    const {params} = match;
-    const {id} = params;
+    const { match, history } = this.props;
+    const { params } = match;
+    const { id } = params;
     try {
       await this.fetchSongData();
     } catch (e) {
@@ -60,19 +60,19 @@ class SongDetails extends Component {
   }
 
   async fetchSongData() {
-    const {match} = this.props;
-    const {params} = match;
-    const {id} = params;
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
     const song = (await getSongAtId(id)).data;
-    this.updateSong(song)
+    this.updateSong(song);
   }
 
   async updateSong(song) {
-    this.setState({song});
+    this.setState({ song });
   }
 
   render() {
-    const {song} = this.state;
+    const { song } = this.state;
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
@@ -80,7 +80,7 @@ class SongDetails extends Component {
       <div>
         <h1>{song.title}</h1>
         <h2>{song.composer}</h2>
-        <AddAccompanimentForm songId={song._id} onUpdateSong={this.updateSong}/>
+        <AddAccompanimentForm songId={song._id} onUpdateSong={this.updateSong} />
         <table>
           <thead>
             <tr>
@@ -95,8 +95,8 @@ class SongDetails extends Component {
             </tr>
           </thead>
           <tbody>
-          {song.accompaniments &&
-          song.accompaniments.filter((accomp) => accomp)
+            {song.accompaniments
+          && song.accompaniments.filter((accomp) => accomp)
             .map((accomp, i) => (
               <tr key={`${accomp._id}-tr`}>
                 <td key={`${accomp._id}-index}`}>{i}</td>
@@ -104,7 +104,7 @@ class SongDetails extends Component {
                 <td key={`${accomp._id}-artist}`}>{accomp.artist}</td>
                 <td key={`${accomp._id}-key}`}>{accomp.key}</td>
                 <td key={`${accomp._id}-url}`}>
-                  <a target="_blank" href={accomp.url}>{accomp.url}</a>
+                  <a target="_blank" href={accomp.url} rel="noreferrer">{accomp.url}</a>
                 </td>
                 <td key={`${accomp._id}-price}`}>{accomp.price}</td>
                 <td key={`${accomp._id}-avgRating}`}>TBD</td>
@@ -116,8 +116,6 @@ class SongDetails extends Component {
       </div>
     );
   }
-
-  l
 }
 
 export default withRouter(SongDetails);

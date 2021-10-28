@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AddSongForm from './components/AddSongForm';
 import SongTable from './components/SongTable';
 import SongDetails from './components/SongDetails';
+import Admin from './components/Admin';
 
 // TODO The SongTable should eventually be a /songs or something
 function App() {
@@ -18,6 +19,9 @@ function App() {
             <AddSongForm />
           </Route>
           <Route path="/songs/:id" component={SongDetails} />
+          <Route exact path="/admin">
+            <Admin />
+          </Route>
         </Switch>
       </BrowserRouter>
     </div>

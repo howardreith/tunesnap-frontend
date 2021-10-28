@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { getSongs, seedDb } from '../utils/backend';
+import { getSongs } from '../utils/backend';
 import { HistoryPropType } from '../utils/propTypes';
 
 class SongTable extends Component {
@@ -11,7 +11,6 @@ class SongTable extends Component {
     super(props);
 
     this.handleSeeMoreClick = this.handleSeeMoreClick.bind(this);
-    this.handleSeedDb = this.handleSeedDb.bind(this);
 
     this.state = { songs: [] };
   }
@@ -28,15 +27,10 @@ class SongTable extends Component {
     push(`/songs/${songId}`);
   }
 
-  async handleSeedDb() {
-    await seedDb();
-  }
-
   render() {
     const { songs } = this.state;
     return (
       <div>
-        <button onClick={this.handleSeedDb}>Seed DB</button>
         <h1>Songs</h1>
         <table>
           <thead>
