@@ -1,38 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { createSong } from '../utils/backend';
-
-export const StyledChatRoom = styled.div`
-  margin: 3px;
-  width: 99%;
-  border: 1px solid black;
-  height: 85vh;
-  overflow-y: scroll;
-`;
-
-export const StyledMessageTextBox = styled.textarea`
-  margin: 3px;
-  width: 100%;
-  display: flex;
-  height: 30px;
-`;
-
-export const StyledSendButton = styled.input`
-  width: 70px;
-  height: 35px;
-  margin: 3px;
-`;
-
-export const StyledMessageTextForm = styled.form`
-  display: flex;
-`;
-
-export const StyledHeaderWrapper = styled.div`
-  height: 60px;
-  text-align: center;
-`;
 
 class AddSongForm extends Component {
   constructor(props) {
