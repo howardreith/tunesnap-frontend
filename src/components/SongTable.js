@@ -15,6 +15,7 @@ class SongTable extends Component {
 
     this.state = { songs: [], searchValue: '', page: 0 };
     this.songs = [];
+    this.timeout = 0;
   }
 
   handleSeeMoreClick(e) {
@@ -28,8 +29,13 @@ class SongTable extends Component {
     const { value } = e.target;
     this.setState({ searchValue: value });
     if (value) {
-      this.songs = (await getSongViaAutocomplete(value)).data;
-      this.setState({ songs: this.songs.slice(0, 20), page: 0 });
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+      this.timeout = setTimeout(async () => {
+        this.songs = (await getSongViaAutocomplete(value)).data;
+        this.setState({ songs: this.songs.slice(0, 20), page: 0 });
+      }, 150);
     } else {
       this.setState({ songs: [] });
     }
