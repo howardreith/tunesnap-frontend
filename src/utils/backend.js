@@ -50,14 +50,14 @@ export async function getSongAtId(id) {
   throw Error(`getSongAtId ${id} was unsuccessful`);
 }
 
-export async function getSongViaAutocomplete(queryString, sortBy) {
+export async function getSongViaAutocomplete(queryString, sortBy, page) {
   const result = await fetch(`${backendUrl}/songs/search`, {
     method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ queryString, sortBy }),
+    body: JSON.stringify({ queryString, sortBy, page }),
   });
 
   if (result.ok) {

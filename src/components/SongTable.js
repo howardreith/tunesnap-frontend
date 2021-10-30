@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel,
+  Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, TablePagination,
 } from '@material-ui/core';
 import { HistoryPropType } from '../utils/propTypes';
 import { getSongViaAutocomplete } from '../utils/backend';
@@ -22,17 +22,15 @@ class SongTable extends Component {
 
     this.handleSeeMoreClick = this.handleSeeMoreClick.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.goToNextPage = this.goToNextPage.bind(this);
-    this.goToPreviousPage = this.goToPreviousPage.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
     this.handleTitleSortClick = this.handleTitleSortClick.bind(this);
     this.handleComposerSortClick = this.handleComposerSortClick.bind(this);
     this.handleSongCycleSortClick = this.handleSongCycleSortClick.bind(this);
     this.updateData = this.updateData.bind(this);
 
     this.state = {
-      songs: [], searchValue: '', page: 0, sortBy: SORT_OPTIONS.TITLE,
+      songs: [], searchValue: '', page: 0, numberOfSongs: 0, sortBy: SORT_OPTIONS.TITLE,
     };
-    this.songs = [];
     this.timeout = 0;
   }
 
@@ -87,37 +85,23 @@ class SongTable extends Component {
     }
   }
 
+  handlePageChange(e, page) {
+    this.setState((state) => ({
+      ...state,
+      page,
+    }), this.updateData);
+  }
+
   async updateData() {
-    const { searchValue, sortBy } = this.state;
-    this.songs = (await getSongViaAutocomplete(searchValue, sortBy)).data;
-    this.setState({ songs: this.songs.slice(0, 20), page: 0 });
-  }
-
-  goToNextPage() {
-    const { page } = this.state;
-    const minIndex = (page + 1) * 20;
-    const maxIndex = (page + 2) * 20;
-    this.setState((state) => ({
-      ...state,
-      page: state.page + 1,
-      songs: this.songs.slice(minIndex, maxIndex),
-    }));
-  }
-
-  goToPreviousPage() {
-    const { page } = this.state;
-    const minIndex = (page - 1) * 20;
-    const maxIndex = page * 20;
-    this.setState((state) => ({
-      ...state,
-      page: state.page - 1,
-      songs: this.songs.slice(minIndex, maxIndex),
-    }));
+    const { searchValue, sortBy, page } = this.state;
+    const response = (await getSongViaAutocomplete(searchValue, sortBy, page)).data;
+    const { numberOfSongs, songs } = response;
+    this.setState({ songs, numberOfSongs });
   }
 
   render() {
     const {
-      songs, searchValue, page, sortBy,
+      songs, searchValue, page, sortBy, numberOfSongs,
     } = this.state;
     return (
       <div>
@@ -168,8 +152,14 @@ class SongTable extends Component {
             ))}
           </TableBody>
         </Table>
-        {page > 0 && <button type="button" onClick={this.goToPreviousPage}>Previous Page</button>}
-        {(page + 1) * 20 < this.songs.length && <button type="button" onClick={this.goToNextPage}>Next Page</button>}
+        <TablePagination
+          rowsPerPageOptions={[10]}
+          rowsPerPage={10}
+          component="div"
+          count={numberOfSongs}
+          page={page}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     );
   }
