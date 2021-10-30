@@ -20,7 +20,7 @@ class SongTable extends Component {
   constructor(props) {
     super(props);
 
-    this.handleSeeMoreClick = this.handleSeeMoreClick.bind(this);
+    this.handleSeeAccompanimentsClick = this.handleSeeAccompanimentsClick.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handleTitleSortClick = this.handleTitleSortClick.bind(this);
@@ -34,10 +34,10 @@ class SongTable extends Component {
     this.timeout = 0;
   }
 
-  handleSeeMoreClick(e) {
+  handleSeeAccompanimentsClick(e) {
     const { history } = this.props;
     const { push } = history;
-    const songId = e.target.id.replace('Button', '');
+    const songId = e.target.id.replace('Button', '').replace('Accompaniments', '');
     push(`/songs/${songId}`);
   }
 
@@ -134,7 +134,7 @@ class SongTable extends Component {
                 />
                 Collection
               </TableCell>
-              <TableCell>See More</TableCell>
+              <TableCell>Accompaniments</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -143,9 +143,13 @@ class SongTable extends Component {
                 <TableCell key={`${song._id}-title}`}>{song.title}</TableCell>
                 <TableCell key={`${song._id}-composer}`}>{song.composer}</TableCell>
                 <TableCell key={`${song._id}-collection`}>{song.songCycle}</TableCell>
-                <TableCell key={`${song._id}-seeMore`}>
-                  <button type="button" id={`${song._id}Button`} onClick={this.handleSeeMoreClick}>
-                    See More
+                <TableCell key={`${song._id}-seeAccompaniments`}>
+                  <button
+                    type="button"
+                    id={`${song._id}AccompanimentsButton`}
+                    onClick={this.handleSeeAccompanimentsClick}
+                  >
+                    {`${song.accompaniments.length} Accompaniments`}
                   </button>
                 </TableCell>
               </TableRow>
