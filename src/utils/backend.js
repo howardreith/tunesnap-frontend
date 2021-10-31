@@ -50,20 +50,24 @@ export async function getSongAtId(id) {
   throw Error(`getSongAtId ${id} was unsuccessful`);
 }
 
-export async function getSongViaAutocomplete(queryString, sortBy, page) {
+export async function getSongViaAutocomplete({
+  titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
+}) {
   const result = await fetch(`${backendUrl}/songs/search`, {
     method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ queryString, sortBy, page }),
+    body: JSON.stringify({
+      titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
+    }),
   });
 
   if (result.ok) {
     return result.json();
   }
-  throw Error(`getSongViaAutocomplete ${queryString} was unsuccessful`);
+  throw Error(`getSongViaAutocomplete ${titleSearchValue}, ${composerSearchValue} was unsuccessful`);
 }
 
 export async function seedDb() {

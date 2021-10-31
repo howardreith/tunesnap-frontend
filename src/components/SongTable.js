@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, TablePagination,
+  Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, TablePagination, TextField, Box,
 } from '@material-ui/core';
 import { HistoryPropType } from '../utils/propTypes';
 import { getSongViaAutocomplete } from '../utils/backend';
@@ -21,7 +21,9 @@ class SongTable extends Component {
     super(props);
 
     this.handleSeeAccompanimentsClick = this.handleSeeAccompanimentsClick.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleTitleSearchChange = this.handleTitleSearchChange.bind(this);
+    this.handleComposerSearchChange = this.handleComposerSearchChange.bind(this);
+    this.handleSongSetSearchChange = this.handleSongSetSearchChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handleTitleSortClick = this.handleTitleSortClick.bind(this);
     this.handleComposerSortClick = this.handleComposerSortClick.bind(this);
@@ -29,7 +31,13 @@ class SongTable extends Component {
     this.updateData = this.updateData.bind(this);
 
     this.state = {
-      songs: [], searchValue: '', page: 0, numberOfSongs: 0, sortBy: SORT_OPTIONS.TITLE,
+      songs: [],
+      titleSearchValue: '',
+      composerSearchValue: '',
+      songSetSearchValue: '',
+      page: 0,
+      numberOfSongs: 0,
+      sortBy: SORT_OPTIONS.TITLE,
     };
     this.timeout = 0;
   }
@@ -41,17 +49,49 @@ class SongTable extends Component {
     push(`/songs/${songId}`);
   }
 
-  async handleSearchChange(e) {
+  async handleTitleSearchChange(e) {
     const { value } = e.target;
-    this.setState({ searchValue: value });
-    if (value) {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
+    this.setState({ titleSearchValue: value }, () => {
+      const { titleSearchValue, composerSearchValue } = this.state;
+      if (titleSearchValue || composerSearchValue) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(async () => {
+          await this.updateData();
+        }, 150);
       }
-      this.timeout = setTimeout(async () => {
-        await this.updateData();
-      }, 150);
-    }
+    });
+  }
+
+  async handleComposerSearchChange(e) {
+    const { value } = e.target;
+    this.setState({ composerSearchValue: value }, () => {
+      const { titleSearchValue, composerSearchValue } = this.state;
+      if (titleSearchValue || composerSearchValue) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(async () => {
+          await this.updateData();
+        }, 150);
+      }
+    });
+  }
+
+  async handleSongSetSearchChange(e) {
+    const { value } = e.target;
+    this.setState({ songSetSearchValue: value }, () => {
+      const { titleSearchValue, composerSearchValue, songSetSearchValue } = this.state;
+      if (titleSearchValue || composerSearchValue || songSetSearchValue) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(async () => {
+          await this.updateData();
+        }, 150);
+      }
+    });
   }
 
   async handleTitleSortClick() {
@@ -93,20 +133,52 @@ class SongTable extends Component {
   }
 
   async updateData() {
-    const { searchValue, sortBy, page } = this.state;
-    const response = (await getSongViaAutocomplete(searchValue, sortBy, page)).data;
+    const {
+      titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
+    } = this.state;
+    const response = (await getSongViaAutocomplete({
+      titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
+    })).data;
     const { numberOfSongs, songs } = response;
     this.setState({ songs, numberOfSongs });
   }
 
   render() {
     const {
-      songs, searchValue, page, sortBy, numberOfSongs,
+      songs, titleSearchValue, composerSearchValue, songSetSearchValue, page, sortBy, numberOfSongs,
     } = this.state;
     return (
       <div>
         <h1>Songs</h1>
-        <input onChange={this.handleSearchChange} value={searchValue} />
+        <Box display="inline-flex">
+          <Box display="flex" margin={1}>
+            <TextField
+              variant="outlined"
+              id="titleSearchInput"
+              onChange={this.handleTitleSearchChange}
+              value={titleSearchValue}
+              label="Title"
+            />
+          </Box>
+          <Box display="flex" margin={1}>
+            <TextField
+              variant="outlined"
+              id="composerSearchInput"
+              onChange={this.handleComposerSearchChange}
+              value={composerSearchValue}
+              label="Composer"
+            />
+          </Box>
+          <Box display="flex" margin={1}>
+            <TextField
+              variant="outlined"
+              id="songSetSearchValue"
+              onChange={this.handleSongSetSearchChange}
+              value={songSetSearchValue}
+              label="Song Cycle / Opera"
+            />
+          </Box>
+        </Box>
         <Table>
           <TableHead>
             <TableRow>
@@ -161,7 +233,7 @@ class SongTable extends Component {
           rowsPerPage={10}
           component="div"
           count={numberOfSongs}
-          page={page}
+          page={numberOfSongs > 0 ? page : 0}
           onPageChange={this.handlePageChange}
         />
       </div>
