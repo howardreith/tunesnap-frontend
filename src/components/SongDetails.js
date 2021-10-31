@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { createSong, getSongAtId } from '../utils/backend';
+import {
+  Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
+} from '@material-ui/core';
+import { getSongAtId } from '../utils/backend';
 import { HistoryPropType, MatchPropType } from '../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
 
@@ -11,8 +14,9 @@ class SongDetails extends Component {
     super(props);
     this.fetchSongData = this.fetchSongData.bind(this);
     this.updateSong = this.updateSong.bind(this);
+    this.handleToggleAddAccompanimentForm = this.handleToggleAddAccompanimentForm.bind(this);
 
-    this.state = { song: null };
+    this.state = { song: null, showAddAccompanimentForm: false };
   }
 
   async componentDidMount() {
@@ -36,53 +40,77 @@ class SongDetails extends Component {
     this.updateSong(song);
   }
 
-  async updateSong(song) {
+  updateSong(song) {
     this.setState({ song });
   }
 
+  handleToggleAddAccompanimentForm() {
+    this.setState((state) => ({ ...state, showAddAccompanimentForm: !state.showAddAccompanimentForm }));
+  }
+
   render() {
-    const { song } = this.state;
+    const { song, showAddAccompanimentForm } = this.state;
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
     return (
-      <div>
-        <h1>{song.title}</h1>
-        <h2>{song.composer}</h2>
-        <AddAccompanimentForm songId={song._id} onUpdateSong={this.updateSong} />
-        <table>
-          <thead>
-            <tr>
-              <th>Index</th>
-              <th>Logo</th>
-              <th>Artist</th>
-              <th>Key</th>
-              <th>Link</th>
-              <th>Price</th>
-              <th>Rating</th>
-              <th>Your Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            {song.accompaniments
-          && song.accompaniments.filter((accomp) => accomp)
-            .map((accomp, i) => (
-              <tr key={`${accomp._id}-tr`}>
-                <td key={`${accomp._id}-index}`}>{i}</td>
-                <td key={`${accomp._id}-logo}`}>TBD</td>
-                <td key={`${accomp._id}-artist}`}>{accomp.artist}</td>
-                <td key={`${accomp._id}-key}`}>{accomp.key}</td>
-                <td key={`${accomp._id}-url}`}>
-                  <a target="_blank" href={accomp.url} rel="noreferrer">{accomp.url}</a>
-                </td>
-                <td key={`${accomp._id}-price}`}>{accomp.price}</td>
-                <td key={`${accomp._id}-avgRating}`}>TBD</td>
-                <td key={`${accomp._id}-userRating}`}>TBD</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Box>
+        <Typography variant="h1">{song.title}</Typography>
+        <Typography variant="h3">
+          {`Music by ${song.composer}`}
+        </Typography>
+        <Typography variant="h5">{song.opusNumber}</Typography>
+        <Typography variant="h3">{`Lyrics by ${song.lyricist}`}</Typography>
+        <Typography variant="h5">
+          <a
+            target="_blank"
+            href={song.textAndTranslation}
+            rel="noreferrer"
+          >
+            Translations available at Lieder.net
+          </a>
+        </Typography>
+        {showAddAccompanimentForm && <AddAccompanimentForm songId={song._id} onUpdateSong={this.updateSong} />}
+        <Box margin={1}>
+          <Button
+            variant="contained"
+            onClick={this.handleToggleAddAccompanimentForm}
+          >
+            {showAddAccompanimentForm ? 'Hide Form' : 'Add New Accompaniment'}
+          </Button>
+        </Box>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Index</TableCell>
+              <TableCell>Logo</TableCell>
+              <TableCell>Artist</TableCell>
+              <TableCell>Key</TableCell>
+              <TableCell>Link</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Rating</TableCell>
+              <TableCell>Your Rating</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {song.accompaniments && song.accompaniments.filter((accomp) => accomp)
+              .map((accomp, i) => (
+                <TableRow key={`${accomp._id}-tr`}>
+                  <TableCell key={`${accomp._id}-index}`}>{i}</TableCell>
+                  <TableCell key={`${accomp._id}-logo}`}>TBD</TableCell>
+                  <TableCell key={`${accomp._id}-artist}`}>{accomp.artist}</TableCell>
+                  <TableCell key={`${accomp._id}-key}`}>{accomp.key}</TableCell>
+                  <TableCell key={`${accomp._id}-url}`}>
+                    <a target="_blank" href={accomp.url} rel="noreferrer">{accomp.url}</a>
+                  </TableCell>
+                  <TableCell key={`${accomp._id}-price}`}>{accomp.price}</TableCell>
+                  <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>
+                  <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </Box>
     );
   }
 }

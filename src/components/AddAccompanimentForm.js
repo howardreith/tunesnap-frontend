@@ -1,7 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
-import { addAccompaniment, createSong } from '../utils/backend';
+import {
+  Typography, Box, FormControl, Button, TextField,
+} from '@material-ui/core';
+import { addAccompaniment } from '../utils/backend';
 
 class AddAccompanimentForm extends Component {
   constructor(props) {
@@ -62,27 +65,41 @@ class AddAccompanimentForm extends Component {
       url, artist, price, key,
     } = this.state;
     return (
-      <div>
+      <Box sx={{ border: '1px solid black', width: '60%', margin: 'auto' }} marginTop={1} marginBottom={1}>
+        <Typography variant="h4">Add Accompaniment</Typography>
         <form id="addAccompanimentForm" onSubmit={this.handleSubmit}>
-          <label htmlFor="urlinput">
-            Link:
-            <input id="urlInput" type="text" name="url" value={url} onChange={this.handleLinkChange} />
-          </label>
-          <label htmlFor="artistInput">
-            Artist:
-            <input id="artistInput" type="text" name="artist" value={artist} onChange={this.handleArtistChange} />
-          </label>
-          <label htmlFor="priceInput">
-            Price:
-            <input id="priceInput" type="text" name="price" value={price} onChange={this.handlePriceChange} />
-          </label>
-          <label htmlFor="keyInput">
-            Key:
-            <input id="keyInput" type="text" name="key" value={key} onChange={this.handleKeyChange} />
-          </label>
-          <input id="addAccompanimentFormSubmitButton" type="submit" />
+          <FormControl>
+            <TextField
+              id="urlInput"
+              type="text"
+              name="url"
+              label="Link"
+              value={url}
+              onChange={this.handleLinkChange}
+            />
+            <TextField
+              id="artistInput"
+              type="text"
+              name="artist"
+              label="Artist"
+              value={artist}
+              onChange={this.handleArtistChange}
+            />
+            <TextField
+              id="priceInput"
+              type="text"
+              name="price"
+              label="Price"
+              value={price}
+              onChange={this.handlePriceChange}
+            />
+            <TextField id="keyInput" type="text" name="key" label="Key" value={key} onChange={this.handleKeyChange} />
+            <Box margin={1}>
+              <Button id="addAccompanimentFormSubmitButton" type="submit" variant="contained">Submit</Button>
+            </Box>
+          </FormControl>
         </form>
-      </div>
+      </Box>
     );
   }
 }
