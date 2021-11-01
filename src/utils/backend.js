@@ -1,5 +1,35 @@
 const backendUrl = 'http://localhost:8080';
 
+export async function login(email, password) {
+  const result = await fetch(`${backendUrl}/user/login`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`Could not log in user with email ${email}.`);
+}
+
+export async function register(email, password) {
+  const result = await fetch(`${backendUrl}/user/register`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`Could not register user with email ${email}.`);
+}
+
 export async function createSong(song) {
   const result = await fetch(`${backendUrl}/songs/create`, {
     method: 'post',
@@ -15,12 +45,13 @@ export async function createSong(song) {
   throw Error(`Song ${JSON.stringify(song)} could not be created.`);
 }
 
-export async function addAccompaniment(accompanimentData) {
+export async function addAccompaniment(accompanimentData, token) {
   const result = await fetch(`${backendUrl}/accompaniment/create`, {
     method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(accompanimentData),
   });
@@ -28,16 +59,6 @@ export async function addAccompaniment(accompanimentData) {
     return result.json();
   }
   throw Error(`Accompaniment ${JSON.stringify(accompanimentData)} could not be created.`);
-}
-
-export async function getSongs() {
-  const result = await fetch(`${backendUrl}/songs`, {
-    method: 'get',
-  });
-  if (result.ok) {
-    return result.json();
-  }
-  throw Error('getSongs was unsuccessful');
 }
 
 export async function getSongAtId(id) {

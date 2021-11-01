@@ -140,7 +140,11 @@ class SongTable extends Component {
       titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
     })).data;
     const { numberOfSongs, songs } = response;
-    this.setState({ songs, numberOfSongs });
+    if (numberOfSongs < 10) {
+      this.setState({ songs, numberOfSongs, page: 0 });
+    } else {
+      this.setState({ songs, numberOfSongs });
+    }
   }
 
   render() {

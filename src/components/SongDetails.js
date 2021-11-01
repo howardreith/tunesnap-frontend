@@ -6,8 +6,9 @@ import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@material-ui/core';
 import { getSongAtId } from '../utils/backend';
-import { HistoryPropType, MatchPropType } from '../utils/propTypes';
+import { HistoryPropType, MatchPropType, UserContextPropType } from '../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
+import { withUserContext } from './UserContextProvider';
 
 class SongDetails extends Component {
   constructor(props) {
@@ -45,11 +46,19 @@ class SongDetails extends Component {
   }
 
   handleToggleAddAccompanimentForm() {
-    this.setState((state) => ({ ...state, showAddAccompanimentForm: !state.showAddAccompanimentForm }));
+    const { userContext, history } = this.props;
+    const { token } = userContext;
+    if (!token) {
+      history.push('/login');
+    } else {
+      this.setState((state) => ({ ...state, showAddAccompanimentForm: !state.showAddAccompanimentForm }));
+    }
   }
 
   render() {
     const { song, showAddAccompanimentForm } = this.state;
+    const { userContext } = this.props;
+    const { token } = userContext;
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
@@ -89,7 +98,7 @@ class SongDetails extends Component {
               <TableCell>Link</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Rating</TableCell>
-              <TableCell>Your Rating</TableCell>
+              {token && <TableCell>Your Rating</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -105,7 +114,7 @@ class SongDetails extends Component {
                   </TableCell>
                   <TableCell key={`${accomp._id}-price}`}>{accomp.price}</TableCell>
                   <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>
-                  <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>
+                  {token && <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>}
                 </TableRow>
               ))}
           </TableBody>
@@ -115,9 +124,10 @@ class SongDetails extends Component {
   }
 }
 
-export default withRouter(SongDetails);
+export default withRouter(withUserContext(SongDetails));
 
 SongDetails.propTypes = {
   history: HistoryPropType.isRequired,
   match: MatchPropType.isRequired,
+  userContext: UserContextPropType.isRequired,
 };

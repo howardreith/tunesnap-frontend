@@ -5,6 +5,8 @@ import {
   Typography, Box, FormControl, Button, TextField,
 } from '@material-ui/core';
 import { addAccompaniment } from '../utils/backend';
+import { withUserContext } from './UserContextProvider';
+import { UserContextPropType } from '../utils/propTypes';
 
 class AddAccompanimentForm extends Component {
   constructor(props) {
@@ -45,12 +47,13 @@ class AddAccompanimentForm extends Component {
     const {
       url, artist, price, key,
     } = this.state;
-    const { songId, onUpdateSong } = this.props;
+    const { songId, onUpdateSong, userContext } = this.props;
+    const { token } = userContext;
     e.preventDefault();
     const accompaniment = {
       url, artist, price, key, songId,
     };
-    addAccompaniment(accompaniment)
+    addAccompaniment(accompaniment, token)
       .then((res) => {
         onUpdateSong(res.data);
       })
@@ -104,9 +107,10 @@ class AddAccompanimentForm extends Component {
   }
 }
 
-export default AddAccompanimentForm;
+export default withUserContext(AddAccompanimentForm);
 
 AddAccompanimentForm.propTypes = {
   songId: PropTypes.string.isRequired,
   onUpdateSong: PropTypes.func.isRequired,
+  userContext: UserContextPropType.isRequired,
 };
