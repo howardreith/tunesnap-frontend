@@ -30,6 +30,22 @@ export async function register(email, password) {
   throw Error(`Could not register user with email ${email}.`);
 }
 
+export async function updatePassword(newPassword, token) {
+  const result = await fetch(`${backendUrl}/user/updatePassword`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ newPassword }),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('Could not update password');
+}
+
 export async function createSong(song) {
   const result = await fetch(`${backendUrl}/songs/create`, {
     method: 'post',

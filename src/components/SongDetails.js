@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import * as PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,

@@ -9,6 +9,7 @@ import GlobalNav from './components/GlobalNav';
 import Login from './components/Login';
 import UserContextProvider from './components/UserContextProvider';
 import Register from './components/Register';
+import UserSettings from './components/UserSettings';
 
 // TODO The SongTable should eventually be a /songs or something
 function App() {
@@ -34,6 +35,9 @@ function App() {
               </Route>
               <Route exact path="/register">
                 <Register />
+              </Route>
+              <Route exact path="/settings">
+                <UserSettings />
               </Route>
             </Switch>
           </div>

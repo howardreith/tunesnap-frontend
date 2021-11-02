@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  AppBar, Toolbar, Button,
+  AppBar, Toolbar, Button, Box,
 } from '@material-ui/core';
-import { HistoryPropType } from '../utils/propTypes';
+import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+import { withUserContext } from './UserContextProvider';
 
 class GlobalNav extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class GlobalNav extends Component {
     this.handleLogInClick = this.handleLogInClick.bind(this);
     this.handleSignUpClick = this.handleSignUpClick.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
+    this.handleUserSettingsClick = this.handleUserSettingsClick.bind(this);
 
     this.state = { };
   }
@@ -38,22 +40,51 @@ class GlobalNav extends Component {
     history.push('/');
   }
 
+  handleUserSettingsClick() {
+    const { history } = this.props;
+    history.push('/settings');
+  }
+
   render() {
+    const { userContext } = this.props;
+    const { token } = userContext;
     return (
       <AppBar position="static">
         <Toolbar>
-          <Button type="button" variant="contained" onClick={this.handleHomeClick}>Home</Button>
-          <Button type="button" variant="contained" onClick={this.handleBackClick}>Back</Button>
-          <Button type="button" variant="contained" onClick={this.handleLogInClick}>Sign In</Button>
-          <Button type="button" variant="contained" onClick={this.handleSignUpClick}>Sign Up</Button>
+          <Box display="flex" width="100%">
+            <Box margin={1}>
+              <Button type="button" variant="contained" onClick={this.handleHomeClick}>Home</Button>
+            </Box>
+            <Box margin={1}>
+              <Button type="button" variant="contained" onClick={this.handleBackClick}>Back</Button>
+            </Box>
+            { !token && (
+            <>
+              <Box marginLeft="auto" margin={1}>
+                <Button type="button" variant="contained" onClick={this.handleLogInClick}>Sign In</Button>
+              </Box>
+              <Box margin={1}>
+                <Button type="button" variant="contained" onClick={this.handleSignUpClick}>Sign Up</Button>
+              </Box>
+            </>
+            )}
+            { token && (
+              <>
+                <Box marginLeft="auto" margin={1}>
+                  <Button type="button" variant="contained" onClick={this.handleUserSettingsClick}>Settings</Button>
+                </Box>
+              </>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
     );
   }
 }
 
-export default withRouter(GlobalNav);
+export default withRouter(withUserContext(GlobalNav));
 
 GlobalNav.propTypes = {
   history: HistoryPropType.isRequired,
+  userContext: UserContextPropType.isRequired,
 };
