@@ -10,6 +10,7 @@ import Login from './components/Login';
 import UserContextProvider from './components/UserContextProvider';
 import Register from './components/Register';
 import UserSettings from './components/UserSettings';
+import AccompanimentDetails from './components/AccompanimentDetails';
 
 // TODO The SongTable should eventually be a /songs or something
 function App() {
@@ -23,22 +24,15 @@ function App() {
               <Route exact path="/">
                 <SongTable />
               </Route>
-              <Route path="/songs/add">
-                <AddSongForm />
-              </Route>
+              <Route path="/songs/add" component={AddSongForm} />
               <Route path="/songs/:id" component={SongDetails} />
               {/* <Route exact path="/admin"> */}
               {/*  <Admin /> */}
               {/* </Route> */}
-              <Route exact path="/login">
-                <Login />
-              </Route>
-              <Route exact path="/register">
-                <Register />
-              </Route>
-              <Route exact path="/settings">
-                <UserSettings />
-              </Route>
+              <Route path="/accompaniments/:id" component={AccompanimentDetails} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/settings" component={UserSettings} />
             </Switch>
           </div>
         </BrowserRouter>

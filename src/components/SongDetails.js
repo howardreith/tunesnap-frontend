@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@material-ui/core';
@@ -20,6 +20,7 @@ class SongDetails extends Component {
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     const { match, history } = this.props;
     const { params } = match;
     const { id } = params;
@@ -32,16 +33,8 @@ class SongDetails extends Component {
     }
   }
 
-  async fetchSongData() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
-    const song = (await getSongAtId(id)).data;
-    this.updateSong(song);
-  }
-
-  updateSong(song) {
-    this.setState({ song });
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleToggleAddAccompanimentForm() {
@@ -54,10 +47,25 @@ class SongDetails extends Component {
     }
   }
 
+  async fetchSongData() {
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
+    const song = (await getSongAtId(id)).data;
+    this.updateSong(song);
+  }
+
+  updateSong(song) {
+    if (this._isMounted) {
+      this.setState({ song });
+    }
+  }
+
   render() {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
     const { token } = userContext;
+    const frontEndUrl = process.env.REACT_APP_FRONTEND_URL.replace('https://', '').replace('http://', '');
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
@@ -109,7 +117,22 @@ class SongDetails extends Component {
                   <TableCell key={`${accomp._id}-artist}`}>{accomp.artist}</TableCell>
                   <TableCell key={`${accomp._id}-key}`}>{accomp.key}</TableCell>
                   <TableCell key={`${accomp._id}-url}`}>
-                    <a target="_blank" href={accomp.url} rel="noreferrer">{accomp.url}</a>
+                    {!accomp.url.includes(frontEndUrl) && (
+                    <a
+                      target="_blank"
+                      href={accomp.url}
+                      rel="noreferrer"
+                    >
+                      {accomp.url}
+                    </a>
+                    )}
+                    {accomp.url.includes(frontEndUrl) && (
+                    <Link
+                      to={`/accompaniments/${accomp._id}`}
+                    >
+                      {accomp.url}
+                    </Link>
+                    )}
                   </TableCell>
                   <TableCell key={`${accomp._id}-price}`}>{accomp.price}</TableCell>
                   <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>

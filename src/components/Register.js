@@ -14,10 +14,11 @@ class Register extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+    this.handleDisplayNameChange = this.handleDisplayNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      email: '', password: '', confirmPassword: '',
+      email: '', password: '', confirmPassword: '', displayName: '',
     };
   }
 
@@ -36,11 +37,22 @@ class Register extends Component {
     this.setState({ confirmPassword: value });
   }
 
+  handleDisplayNameChange(e) {
+    const { value } = e.target;
+    this.setState({ displayName: value });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
-    const { email, password, confirmPassword } = this.state;
+    const {
+      email, password, confirmPassword, displayName,
+    } = this.state;
     if (!email) {
       console.error('Email required');
+      return;
+    }
+    if (!displayName) {
+      console.error('User Name Required');
       return;
     }
     if (!password) {
@@ -52,7 +64,7 @@ class Register extends Component {
       return;
     }
     const { history } = this.props;
-    register(email, password)
+    register(email, password, displayName)
       .then(() => {
         history.push('/login');
       })
@@ -64,7 +76,7 @@ class Register extends Component {
 
   render() {
     const {
-      email, password, confirmPassword,
+      email, password, confirmPassword, displayName,
     } = this.state;
     return (
       <Box>
@@ -94,6 +106,14 @@ class Register extends Component {
               label="Confirm Password"
               value={confirmPassword}
               onChange={this.handleConfirmPasswordChange}
+            />
+            <TextField
+              id="registerDisplayNameInput"
+              type="text"
+              name="displayName"
+              label="User Name"
+              value={displayName}
+              onChange={this.handleDisplayNameChange}
             />
             <Box margin={1}>
               <Button id="loginSubmitButton" type="submit" variant="contained">Submit</Button>

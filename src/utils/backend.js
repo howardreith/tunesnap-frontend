@@ -15,14 +15,14 @@ export async function login(email, password) {
   throw Error(`Could not log in user with email ${email}.`);
 }
 
-export async function register(email, password) {
+export async function register(email, password, displayName) {
   const result = await fetch(`${backendUrl}/user/register`, {
     method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, displayName }),
   });
   if (result.ok) {
     return result.json();
@@ -66,15 +66,40 @@ export async function addAccompaniment(accompanimentData, token) {
     method: 'post',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(accompanimentData),
+    body: accompanimentData,
   });
   if (result.ok) {
     return result.json();
   }
   throw Error(`Accompaniment ${JSON.stringify(accompanimentData)} could not be created.`);
+}
+
+export async function getAccompanimentAtId(id, token) {
+  const result = await fetch(`${backendUrl}/accompaniments/${id}`, {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`getAccompanimentAtId ${id} was unsuccessful`);
+}
+
+export async function getAccompanimentFileAtId(id, token) {
+  const result = await fetch(`${backendUrl}/accompaniments/files/${id}`, {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (result) {
+    return result;
+  }
+  throw Error(`getAccompanimentDownloadAtId ${id} was unsuccessful`);
 }
 
 export async function getSongAtId(id) {
