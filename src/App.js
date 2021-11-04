@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AddSongForm from './components/AddSongForm';
 import SongTable from './components/SongTable';
 import SongDetails from './components/SongDetails';
-import Admin from './components/Admin';
+// import Admin from './components/Admin';
 import GlobalNav from './components/GlobalNav';
 import Login from './components/Login';
 import UserContextProvider from './components/UserContextProvider';

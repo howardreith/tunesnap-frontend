@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
-import { register, updatePassword } from '../utils/backend';
+import { updatePassword } from '../utils/backend';
 import { withUserContext } from './UserContextProvider';
 
 class UserSettings extends Component {

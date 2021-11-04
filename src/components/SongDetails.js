@@ -65,7 +65,7 @@ class SongDetails extends Component {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
     const { token } = userContext;
-    const frontEndUrl = process.env.REACT_APP_FRONTEND_URL.replace('https://', '').replace('http://', '');
+    const frontEndUrl = process.env.REACT_APP_FRONTEND_URL;
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
@@ -81,7 +81,7 @@ class SongDetails extends Component {
           <a
             target="_blank"
             href={song.textAndTranslation}
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Translations available at Lieder.net
           </a>
@@ -117,20 +117,20 @@ class SongDetails extends Component {
                   <TableCell key={`${accomp._id}-artist}`}>{accomp.artist}</TableCell>
                   <TableCell key={`${accomp._id}-key}`}>{accomp.key}</TableCell>
                   <TableCell key={`${accomp._id}-url}`}>
-                    {!accomp.url.includes(frontEndUrl) && (
+                    {accomp.url && (
                     <a
                       target="_blank"
                       href={accomp.url}
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       {accomp.url}
                     </a>
                     )}
-                    {accomp.url.includes(frontEndUrl) && (
+                    {!accomp.url && (
                     <Link
                       to={`/accompaniments/${accomp._id}`}
                     >
-                      {accomp.url}
+                      {`${frontEndUrl}/accompaniments/${accomp._id}`}
                     </Link>
                     )}
                   </TableCell>

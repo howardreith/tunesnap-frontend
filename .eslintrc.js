@@ -23,6 +23,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     "react/jsx-props-no-spreading": "off",
     'no-underscore-dangle': 0,
-    'max-len': ["error", { "code": 120 }]
+    'max-len': ["error", { "code": 120 }],
+    'jsx-a11y/media-has-caption': 0,
   },
 };

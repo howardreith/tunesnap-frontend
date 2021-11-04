@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import * as PropTypes from 'prop-types';
 import { createSong } from '../utils/backend';
 
 class AddSongForm extends Component {
@@ -93,29 +92,65 @@ class AddSongForm extends Component {
           </label>
           <label htmlFor="composerInput">
             Composer:
-            <input id="composerInput" type="text" name="composer" value={composer} onChange={this.handleComposerChange} />
+            <input
+              id="composerInput"
+              type="text"
+              name="composer"
+              value={composer}
+              onChange={this.handleComposerChange}
+            />
           </label>
           <label htmlFor="lyricistInput">
             Lyricist:
-            <input id="lyricistInput" type="text" name="lyricist" value={lyricist} onChange={this.handleLyricistChange} />
+            <input
+              id="lyricistInput"
+              type="text"
+              name="lyricist"
+              value={lyricist}
+              onChange={this.handleLyricistChange}
+            />
           </label>
           <label htmlFor="textAndTranslationInput">
             Text and Translation Link:
-            <input id="textAndTranslationInput" type="text" name="textAndTranslation" value={textAndTranslation} onChange={this.handleTextAndTranslationChange} />
+            <input
+              id="textAndTranslationInput"
+              type="text"
+              name="textAndTranslation"
+              value={textAndTranslation}
+              onChange={this.handleTextAndTranslationChange}
+            />
           </label>
           <label htmlFor="opusNumberInput">
             Opus Number:
-            <input id="opusNumberInput" type="text" name="opusNumber" value={opusNumber} onChange={this.handleOpusNumberChange} />
+            <input
+              id="opusNumberInput"
+              type="text"
+              name="opusNumber"
+              value={opusNumber}
+              onChange={this.handleOpusNumberChange}
+            />
           </label>
 
           <label htmlFor="songCycleInput">
             Song Cycle:
-            <input id="songCycleInput" type="text" name="songCycle" value={songCycle} onChange={this.handleSongCycleChange} />
+            <input
+              id="songCycleInput"
+              type="text"
+              name="songCycle"
+              value={songCycle}
+              onChange={this.handleSongCycleChange}
+            />
           </label>
 
           <label htmlFor="songCycleIndexInput">
             Song Cycle Index:
-            <input id="songCycleIndexInput" type="text" name="songCycleIndex" value={songCycleIndex} onChange={this.handleSongCycleIndexChange} />
+            <input
+              id="songCycleIndexInput"
+              type="text"
+              name="songCycleIndex"
+              value={songCycleIndex}
+              onChange={this.handleSongCycleIndexChange}
+            />
           </label>
 
           <input id="addSongFormSubmitButton" type="submit" />

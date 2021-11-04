@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
+  Box, Typography, Button,
 } from '@material-ui/core';
 // import { getAccompanimentAtId } from '../utils/backend';
 import { HistoryPropType, MatchPropType, UserContextPropType } from '../utils/propTypes';
@@ -21,7 +21,6 @@ class AccompanimentDetails extends Component {
   }
 
   componentDidMount() {
-    const { history } = this.props;
     this.fetchAccompanimentData();
     this.fetchAccompanimentDownload();
   }
@@ -48,7 +47,11 @@ class AccompanimentDetails extends Component {
       .then((res) => res.blob())
       .then((blob) => {
       // There is no way to directly download the blob. We must create a link to the blob and click it
-        this.setState({ accompanimentFile: blob });
+        this.setState({ accompanimentFile: blob }, () => {
+          const { accompanimentFile } = this.state;
+          const accompanimentFileBlobUrl = URL.createObjectURL(accompanimentFile);
+          this.setState({ accompanimentFileBlobUrl });
+        });
       });
   }
 
@@ -57,12 +60,11 @@ class AccompanimentDetails extends Component {
   }
 
   downloadAccompanimentFile() {
-    const { accompaniment, accompanimentFile } = this.state;
+    const { accompaniment, accompanimentFileBlobUrl } = this.state;
     const { song, artist } = accompaniment;
     const { title } = song;
-    const href = window.URL.createObjectURL(accompanimentFile);
     const link = document.createElement('a');
-    link.href = href;
+    link.href = accompanimentFileBlobUrl;
     link.setAttribute('download', `${title}-${artist}.mp3`);
     document.body.appendChild(link);
     link.click();
@@ -70,7 +72,7 @@ class AccompanimentDetails extends Component {
   }
 
   render() {
-    const { accompaniment, accompanimentFile } = this.state;
+    const { accompaniment, accompanimentFile, accompanimentFileBlobUrl } = this.state;
     const { history } = this.props;
     const { userContext } = this.props;
     const { token } = userContext;
@@ -92,7 +94,7 @@ class AccompanimentDetails extends Component {
           <a
             target="_blank"
             href={accompaniment.song.textAndTranslation}
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Translations available at Lieder.net
           </a>
@@ -102,7 +104,14 @@ class AccompanimentDetails extends Component {
         <Typography variant="h4">{`${accompaniment.key}`}</Typography>
         {accompanimentFile && (
         <Box>
-          <Button onClick={this.downloadAccompanimentFile} variant="contained">Download</Button>
+          <Box margin={1}>
+            <audio controls="controls">
+              <source src={accompanimentFileBlobUrl} type="audio/mp3" />
+            </audio>
+          </Box>
+          <Box margin={1}>
+            <Button onClick={this.downloadAccompanimentFile} variant="contained">Download</Button>
+          </Box>
         </Box>
         )}
         {!accompanimentFile && (

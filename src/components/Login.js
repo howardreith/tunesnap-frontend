@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import * as PropTypes from 'prop-types';
 import {
   Typography, Box, FormControl, Button, TextField,
 } from '@material-ui/core';

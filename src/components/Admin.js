@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key,class-methods-use-this */
 import React, { Component } from 'react';
-import * as PropTypes from 'prop-types';
 import { getSongTitles, seedDb, pruneSongs } from '../utils/backend';
 
 class Admin extends Component {
