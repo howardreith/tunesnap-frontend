@@ -37,8 +37,26 @@ class Login extends Component {
     e.preventDefault();
     login(email, password)
       .then((res) => {
-        const { email: responseEmail, token } = res.data;
-        userContext.setUserInfo({ email: responseEmail, token });
+        const {
+          email: responseEmail,
+          token,
+          displayName,
+          accompanimentSubmissions,
+          favoriteSongs,
+          favoriteAccompaniments,
+          cart,
+          accompanimentsOwned,
+        } = res.data;
+        userContext.setUserInfo({
+          email: responseEmail,
+          token,
+          displayName,
+          accompanimentSubmissions,
+          favoriteSongs,
+          favoriteAccompaniments,
+          cart,
+          accompanimentsOwned,
+        });
         if (history.action !== 'POP') {
           history.goBack();
         } else {

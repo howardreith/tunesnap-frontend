@@ -11,6 +11,7 @@ import UserContextProvider from './components/UserContextProvider';
 import Register from './components/Register';
 import UserSettings from './components/UserSettings';
 import AccompanimentDetails from './components/AccompanimentDetails';
+import Cart from './components/Cart';
 
 // TODO The SongTable should eventually be a /songs or something
 function App() {
@@ -33,6 +34,7 @@ function App() {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/settings" component={UserSettings} />
+              <Route exact path="/cart" component={Cart} />
             </Switch>
           </div>
         </BrowserRouter>

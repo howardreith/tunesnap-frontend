@@ -72,7 +72,7 @@ class AddAccompanimentForm extends Component {
       url, artist, price, key, file, formChosen,
     } = this.state;
     const { songId, onUpdateSong, userContext } = this.props;
-    const { token } = userContext;
+    const { token, updateAccompanimentsSubmittedAndOwned } = userContext;
     e.preventDefault();
     const data = new FormData();
     data.append('songId', songId);
@@ -88,7 +88,9 @@ class AddAccompanimentForm extends Component {
     }
     addAccompaniment(data, token)
       .then((res) => {
-        onUpdateSong(res.data);
+        onUpdateSong(res.data.song);
+        const { accompanimentSubmissions, accompanimentsOwned } = res.data.user;
+        updateAccompanimentsSubmittedAndOwned({ accompanimentSubmissions, accompanimentsOwned });
       })
       .catch((error) => {
       // eslint-disable-next-line no-console

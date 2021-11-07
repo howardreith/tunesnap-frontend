@@ -73,15 +73,12 @@ class AccompanimentDetails extends Component {
 
   render() {
     const { accompaniment, accompanimentFile, accompanimentFileBlobUrl } = this.state;
-    const { history } = this.props;
     const { userContext } = this.props;
-    const { token } = userContext;
-    if (!token) {
-      history.push('/login');
-    }
     if (!accompaniment) {
       return <div><span>Loading...</span></div>;
     }
+    const userOwnsAccompaniment = userContext.accompanimentsOwned.includes(accompaniment._id);
+    const accompanimentIsFree = accompaniment.price === 0;
     return (
       <Box>
         <Typography variant="h1">{accompaniment.song.title}</Typography>
@@ -102,7 +99,7 @@ class AccompanimentDetails extends Component {
         <Typography variant="h3">{`Performance by ${accompaniment.artist}`}</Typography>
         <Typography variant="h3">{`Uploaded by ${accompaniment.addedBy.displayName}`}</Typography>
         <Typography variant="h4">{`${accompaniment.key}`}</Typography>
-        {accompanimentFile && (
+        {accompanimentFile && (userOwnsAccompaniment || accompanimentIsFree) && (
         <Box>
           <Box margin={1}>
             <audio controls="controls">

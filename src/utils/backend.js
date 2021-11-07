@@ -80,7 +80,7 @@ export async function getAccompanimentAtId(id, token) {
   const result = await fetch(`${backendUrl}/accompaniments/${id}`, {
     method: 'get',
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : null,
     },
   });
   if (result.ok) {
@@ -89,17 +89,62 @@ export async function getAccompanimentAtId(id, token) {
   throw Error(`getAccompanimentAtId ${id} was unsuccessful`);
 }
 
+export async function getCart(token) {
+  const result = await fetch(`${backendUrl}/user/cart`, {
+    method: 'get',
+    headers: {
+      Authorization: token ? `Bearer ${token}` : null,
+    },
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('getCart was unsuccessful');
+}
+
 export async function getAccompanimentFileAtId(id, token) {
   const result = await fetch(`${backendUrl}/accompaniments/files/${id}`, {
     method: 'get',
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : null,
     },
   });
   if (result) {
     return result;
   }
   throw Error(`getAccompanimentDownloadAtId ${id} was unsuccessful`);
+}
+
+export async function addAccompanimentToCart(accompanimentId, token) {
+  const result = await fetch(`${backendUrl}/user/addToCart`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ accompanimentId }),
+  });
+  if (result) {
+    return result.json();
+  }
+  throw Error(`addAccompanimentToCart ${accompanimentId} was unsuccessful`);
+}
+
+export async function removeAccompanimentFromCart(accompanimentId, token) {
+  const result = await fetch(`${backendUrl}/user/removeFromCart`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ accompanimentId }),
+  });
+  if (result) {
+    return result.json();
+  }
+  throw Error(`removeAccompanimentFromCart ${accompanimentId} was unsuccessful`);
 }
 
 export async function getSongAtId(id) {

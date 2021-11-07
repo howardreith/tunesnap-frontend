@@ -15,6 +15,7 @@ class SongDetails extends Component {
     this.fetchSongData = this.fetchSongData.bind(this);
     this.updateSong = this.updateSong.bind(this);
     this.handleToggleAddAccompanimentForm = this.handleToggleAddAccompanimentForm.bind(this);
+    this.handleAddToCart = this.handleAddToCart.bind(this);
 
     this.state = { song: null, showAddAccompanimentForm: false };
   }
@@ -61,10 +62,21 @@ class SongDetails extends Component {
     }
   }
 
+  handleAddToCart(e, id) {
+    const { userContext, history } = this.props;
+    const { token, addAccompanimentToCart } = userContext;
+    if (!token) {
+      history.push('/login');
+    } else {
+      addAccompanimentToCart(id);
+    }
+  }
+
   render() {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
-    const { token } = userContext;
+    const { token, cart, accompanimentsOwned } = userContext;
+    const accompanimentsOwnedIds = accompanimentsOwned.map((acc) => acc.accompaniment);
     const frontEndUrl = process.env.REACT_APP_FRONTEND_URL;
     if (!song) {
       return <div><span>Loading...</span></div>;
@@ -106,39 +118,73 @@ class SongDetails extends Component {
               <TableCell>Price</TableCell>
               <TableCell>Rating</TableCell>
               {token && <TableCell>Your Rating</TableCell>}
+              <TableCell>Cart</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {song.accompaniments && song.accompaniments.filter((accomp) => accomp)
-              .map((accomp, i) => (
-                <TableRow key={`${accomp._id}-tr`}>
-                  <TableCell key={`${accomp._id}-index}`}>{i}</TableCell>
-                  <TableCell key={`${accomp._id}-logo}`}>TBD</TableCell>
-                  <TableCell key={`${accomp._id}-artist}`}>{accomp.artist}</TableCell>
-                  <TableCell key={`${accomp._id}-key}`}>{accomp.key}</TableCell>
-                  <TableCell key={`${accomp._id}-url}`}>
-                    {accomp.url && (
-                    <a
-                      target="_blank"
-                      href={accomp.url}
-                      rel="noopener noreferrer"
-                    >
-                      {accomp.url}
-                    </a>
-                    )}
-                    {!accomp.url && (
-                    <Link
-                      to={`/accompaniments/${accomp._id}`}
-                    >
-                      {`${frontEndUrl}/accompaniments/${accomp._id}`}
-                    </Link>
-                    )}
-                  </TableCell>
-                  <TableCell key={`${accomp._id}-price}`}>{accomp.price}</TableCell>
-                  <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>
-                  {token && <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>}
-                </TableRow>
-              ))}
+              .map((accomp, i) => {
+                const accompanimentIsLocal = !accomp.url;
+                const accompanimentCostsMoney = accomp.price > 0;
+                const accompanimentIsInCart = cart.includes(accomp._id);
+                const accompanimentAlreadyOwned = accompanimentsOwnedIds.includes(accomp._id);
+                return (
+                  <TableRow key={`${accomp._id}-tr`}>
+                    <TableCell key={`${accomp._id}-index}`}>{i}</TableCell>
+                    <TableCell key={`${accomp._id}-logo}`}>TBD</TableCell>
+                    <TableCell key={`${accomp._id}-artist}`}>{accomp.artist}</TableCell>
+                    <TableCell key={`${accomp._id}-key}`}>{accomp.key}</TableCell>
+                    <TableCell key={`${accomp._id}-url}`}>
+                      {!accompanimentIsLocal && (
+                      <a
+                        target="_blank"
+                        href={accomp.url}
+                        rel="noopener noreferrer"
+                      >
+                        {accomp.url}
+                      </a>
+                      )}
+                      {accompanimentIsLocal && (
+                      <Link
+                        to={`/accompaniments/${accomp._id}`}
+                      >
+                        {`${frontEndUrl}/accompaniments/${accomp._id}`}
+                      </Link>
+                      )}
+                    </TableCell>
+                    <TableCell key={`${accomp._id}-price}`}>{accomp.price === '0' ? 'Free' : accomp.price}</TableCell>
+                    <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>
+                    {token && <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>}
+                    <TableCell key={`${accomp._id}-addToCart`}>
+                      {accompanimentIsLocal && accompanimentCostsMoney && accompanimentIsInCart
+                      && (
+                      <Typography variant="body1">
+                        Already in cart
+                      </Typography>
+                      )}
+                      {accompanimentIsLocal && accompanimentCostsMoney && accompanimentAlreadyOwned
+                      && (
+                        <Typography variant="body1">
+                          You own this
+                        </Typography>
+                      )}
+                      {accompanimentIsLocal
+                      && accompanimentCostsMoney
+                      && !accompanimentIsInCart
+                      && !accompanimentAlreadyOwned
+                      && (
+                      <Button
+                        id={`${accomp._id}-addToCartButton`}
+                        variant="contained"
+                        onClick={(e) => this.handleAddToCart(e, accomp._id)}
+                      >
+                        Add to Cart
+                      </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </Box>

@@ -16,6 +16,7 @@ class GlobalNav extends Component {
     this.handleSignUpClick = this.handleSignUpClick.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.handleUserSettingsClick = this.handleUserSettingsClick.bind(this);
+    this.handleCartClick = this.handleCartClick.bind(this);
 
     this.state = { };
   }
@@ -45,6 +46,11 @@ class GlobalNav extends Component {
     history.push('/settings');
   }
 
+  handleCartClick() {
+    const { history } = this.props;
+    history.push('/cart');
+  }
+
   render() {
     const { userContext } = this.props;
     const { token } = userContext;
@@ -72,6 +78,9 @@ class GlobalNav extends Component {
               <>
                 <Box marginLeft="auto" margin={1}>
                   <Button type="button" variant="contained" onClick={this.handleUserSettingsClick}>Settings</Button>
+                </Box>
+                <Box margin={1}>
+                  <Button type="button" variant="contained" onClick={this.handleCartClick}>Cart</Button>
                 </Box>
               </>
             )}
