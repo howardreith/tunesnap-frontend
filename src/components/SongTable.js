@@ -161,6 +161,7 @@ class SongTable extends Component {
     const {
       songs, titleSearchValue, composerSearchValue, songSetSearchValue, page, sortBy, numberOfSongs,
     } = this.state;
+
     return (
       <div>
         <h1>Songs</h1>

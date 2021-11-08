@@ -13,6 +13,7 @@ class Cart extends Component {
     super(props);
 
     this.removeAccompanimentFromCart = this.removeAccompanimentFromCart.bind(this);
+    this.handleCheckout = this.handleCheckout.bind(this);
 
     this.state = { cartContents: [] };
   }
@@ -33,6 +34,11 @@ class Cart extends Component {
     setCart(justTheIds);
   }
 
+  handleCheckout() {
+    const { history } = this.props;
+    history.push('/checkout');
+  }
+
   render() {
     // TODO check in on why accompaniments count keeps going up
     const { history, userContext } = this.props;
@@ -41,6 +47,7 @@ class Cart extends Component {
       history.push('/login');
     }
     const { cartContents } = this.state;
+    let total = 0;
     return (
       <Box>
         <Typography variant="h1">Your Cart</Typography>
@@ -56,26 +63,37 @@ class Cart extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cartContents.map((accomp) => (
-              <TableRow key={`cartrow-${accomp._id}`}>
-                <TableCell key={`cartrow-${accomp._id}-composer`}>{accomp.song.composer}</TableCell>
-                <TableCell key={`cartrow-${accomp._id}-songTitle`}>{accomp.song.title}</TableCell>
-                <TableCell key={`cartow-${accomp._id}-artist`}>{accomp.artist}</TableCell>
-                <TableCell key={`cartow-${accomp._id}-filename`}>
-                  <Link
-                    to={`/accompaniments/${accomp._id}`}
-                  >
-                    {`${accomp.song.title}-${accomp.artist}.${accomp.file.originalFilename.split('.')[1]}`}
-                  </Link>
-                </TableCell>
-                <TableCell key={`cartrow${accomp._id}-price`}>{accomp.price}</TableCell>
-                <TableCell key={`cartrow${accomp._id}-removeButton`}>
-                  <Button type="button" variant="contained" onClick={() => this.removeAccompanimentFromCart(accomp._id)}>Remove</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {cartContents.map((accomp) => {
+              total += accomp.price;
+              return (
+                <TableRow key={`cartrow-${accomp._id}`}>
+                  <TableCell key={`cartrow-${accomp._id}-composer`}>{accomp.song.composer}</TableCell>
+                  <TableCell key={`cartrow-${accomp._id}-songTitle`}>{accomp.song.title}</TableCell>
+                  <TableCell key={`cartow-${accomp._id}-artist`}>{accomp.artist}</TableCell>
+                  <TableCell key={`cartow-${accomp._id}-filename`}>
+                    <Link
+                      to={`/accompaniments/${accomp._id}`}
+                    >
+                      {`${accomp.song.title}-${accomp.artist}.${accomp.file.originalFilename.split('.')[1]}`}
+                    </Link>
+                  </TableCell>
+                  <TableCell key={`cartrow${accomp._id}-price`}>{accomp.price}</TableCell>
+                  <TableCell key={`cartrow${accomp._id}-removeButton`}>
+                    <Button
+                      type="button"
+                      variant="contained"
+                      onClick={() => this.removeAccompanimentFromCart(accomp._id)}
+                    >
+                      Remove
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
+        <Typography variant="h5">{`Total: $${total}`}</Typography>
+        <Button type="button" variant="contained" onClick={this.handleCheckout}>Checkout</Button>
       </Box>
     );
   }
