@@ -77,7 +77,8 @@ class AccompanimentDetails extends Component {
     if (!accompaniment) {
       return <div><span>Loading...</span></div>;
     }
-    const userOwnsAccompaniment = userContext.accompanimentsOwned.includes(accompaniment._id);
+    const userOwnsAccompaniment = userContext.accompanimentsOwned
+      .map((acc) => acc.accompaniment).includes(accompaniment._id);
     const accompanimentIsFree = accompaniment.price === 0;
     return (
       <Box>
@@ -99,18 +100,29 @@ class AccompanimentDetails extends Component {
         <Typography variant="h3">{`Performance by ${accompaniment.artist}`}</Typography>
         <Typography variant="h3">{`Uploaded by ${accompaniment.addedBy.displayName}`}</Typography>
         <Typography variant="h4">{`${accompaniment.key}`}</Typography>
-        {accompanimentFile && (userOwnsAccompaniment || accompanimentIsFree) && (
+
         <Box>
-          <Box margin={1}>
-            <audio controls="controls">
-              <source src={accompanimentFileBlobUrl} type="audio/mp3" />
-            </audio>
+          {accompanimentFileBlobUrl && (
+          <Box>
+            {!userOwnsAccompaniment && (
+            <Box>
+              <Typography variant="h5">You do not own this accompaniment. Here is a sample</Typography>
+            </Box>
+            )}
+            <Box margin={1}>
+              <audio controls="controls">
+                <source src={accompanimentFileBlobUrl} type="audio/mp3" />
+              </audio>
+            </Box>
           </Box>
+          )}
+          {userOwnsAccompaniment && !accompanimentIsFree && (
           <Box margin={1}>
             <Button onClick={this.downloadAccompanimentFile} variant="contained">Download</Button>
           </Box>
+          )}
         </Box>
-        )}
+
         {!accompanimentFile && (
           <Box>
             <Typography variant="body1">Downloading Audio File...</Typography>
