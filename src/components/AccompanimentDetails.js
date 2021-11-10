@@ -16,6 +16,7 @@ class AccompanimentDetails extends Component {
     this.fetchAccompanimentDownload = this.fetchAccompanimentDownload.bind(this);
     this.updateAccompaniment = this.updateAccompaniment.bind(this);
     this.downloadAccompanimentFile = this.downloadAccompanimentFile.bind(this);
+    this.handleAddToCart = this.handleAddToCart.bind(this);
 
     this.state = { accompaniment: null, accompanimentFile: null };
   }
@@ -23,6 +24,18 @@ class AccompanimentDetails extends Component {
   componentDidMount() {
     this.fetchAccompanimentData();
     this.fetchAccompanimentDownload();
+  }
+
+  handleAddToCart() {
+    const { userContext, history } = this.props;
+    const { token, addAccompanimentToCart } = userContext;
+    const { accompaniment } = this.state;
+    const id = accompaniment._id;
+    if (!token) {
+      history.push('/login');
+    } else {
+      addAccompanimentToCart(id);
+    }
   }
 
   fetchAccompanimentData() {
@@ -80,6 +93,8 @@ class AccompanimentDetails extends Component {
     const userOwnsAccompaniment = userContext.accompanimentsOwned
       .map((acc) => acc.accompaniment).includes(accompaniment._id);
     const accompanimentIsFree = accompaniment.price === 0;
+    const { cart } = userContext;
+    const accompanimentIsInCart = cart.includes(accompaniment._id);
     return (
       <Box>
         <Typography variant="h1">{accompaniment.song.title}</Typography>
@@ -114,6 +129,20 @@ class AccompanimentDetails extends Component {
                 <source src={accompanimentFileBlobUrl} type="audio/mp3" />
               </audio>
             </Box>
+            {!userOwnsAccompaniment && !accompanimentIsFree && (
+              <Box>
+                {!accompanimentIsInCart && (
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={this.handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+                )}
+                {accompanimentIsInCart && <Typography variant="body1">Already in Cart</Typography>}
+              </Box>
+            )}
           </Box>
           )}
           {userOwnsAccompaniment && !accompanimentIsFree && (
