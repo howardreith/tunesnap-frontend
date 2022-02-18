@@ -33,8 +33,8 @@ class Checkout extends Component {
   }
 
   render() {
-    const { history, userContext } = this.props;
-    const { token } = userContext;
+    const { history } = this.props;
+    const token = localStorage.getItem('authToken');
     const { fullName, addressOne } = this.state;
     if (!token) {
       history.push('/login');

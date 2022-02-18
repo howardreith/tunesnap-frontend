@@ -47,9 +47,9 @@ class Login extends Component {
           cart,
           accompanimentsOwned,
         } = res.data;
+        localStorage.setItem('authToken', token);
         userContext.setUserInfo({
           email: responseEmail,
-          token,
           displayName,
           accompanimentSubmissions,
           favoriteSongs,
@@ -70,9 +70,7 @@ class Login extends Component {
   }
 
   render() {
-    const {
-      email, password,
-    } = this.state;
+    const { email, password } = this.state;
     return (
       <Box>
         <Typography variant="h1">Log In</Typography>

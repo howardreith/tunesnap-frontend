@@ -72,7 +72,8 @@ class AddAccompanimentForm extends Component {
       url, artist, price, key, file, formChosen,
     } = this.state;
     const { songId, onUpdateSong, userContext } = this.props;
-    const { token, updateAccompanimentsSubmittedAndOwned } = userContext;
+    const { updateAccompanimentsSubmittedAndOwned } = userContext;
+    const token = localStorage.getItem('authToken');
     e.preventDefault();
     const data = new FormData();
     data.append('songId', songId);

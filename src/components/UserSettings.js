@@ -46,8 +46,7 @@ class UserSettings extends Component {
       console.error('New passwords do not match');
       return;
     }
-    const { userContext } = this.props;
-    const { token } = userContext;
+    const token = localStorage.getItem('authToken');
     updatePassword(newPassword, token)
       .then(() => {
         console.info('Password Updated!');
@@ -59,8 +58,8 @@ class UserSettings extends Component {
   }
 
   render() {
-    const { userContext, history } = this.props;
-    const { token } = userContext;
+    const { history } = this.props;
+    const token = localStorage.getItem('authToken');
     if (!token) {
       history.push('/login');
     }

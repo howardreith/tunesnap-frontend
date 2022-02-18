@@ -27,8 +27,9 @@ class AccompanimentDetails extends Component {
   }
 
   handleAddToCart() {
+    const token = localStorage.getItem('authToken');
     const { userContext, history } = this.props;
-    const { token, addAccompanimentToCart } = userContext;
+    const { addAccompanimentToCart } = userContext;
     const { accompaniment } = this.state;
     const id = accompaniment._id;
     if (!token) {
@@ -39,10 +40,10 @@ class AccompanimentDetails extends Component {
   }
 
   fetchAccompanimentData() {
-    const { match, userContext } = this.props;
+    const { match } = this.props;
     const { params } = match;
     const { id } = params;
-    const { token } = userContext;
+    const token = localStorage.getItem('authToken');
     getAccompanimentAtId(id, token).then((res) => {
       this.updateAccompaniment(res.data);
     }).catch((e) => {
@@ -52,10 +53,10 @@ class AccompanimentDetails extends Component {
   }
 
   fetchAccompanimentDownload() {
-    const { match, userContext } = this.props;
+    const { match } = this.props;
     const { params } = match;
     const { id } = params;
-    const { token } = userContext;
+    const token = localStorage.getItem('authToken');
     getAccompanimentFileAtId(id, token)
       .then((res) => res.blob())
       .then((blob) => {

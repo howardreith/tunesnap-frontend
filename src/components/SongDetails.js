@@ -39,8 +39,8 @@ class SongDetails extends Component {
   }
 
   handleToggleAddAccompanimentForm() {
-    const { userContext, history } = this.props;
-    const { token } = userContext;
+    const { history } = this.props;
+    const token = localStorage.getItem('authToken');
     if (!token) {
       history.push('/login');
     } else {
@@ -75,7 +75,8 @@ class SongDetails extends Component {
   render() {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
-    const { token, cart, accompanimentsOwned } = userContext;
+    const { cart, accompanimentsOwned } = userContext;
+    const token = localStorage.getItem('authToken');
     const accompanimentsOwnedIds = accompanimentsOwned.map((acc) => acc.accompaniment);
     const frontEndUrl = process.env.REACT_APP_FRONTEND_URL;
     if (!song) {

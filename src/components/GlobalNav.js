@@ -52,8 +52,7 @@ class GlobalNav extends Component {
   }
 
   render() {
-    const { userContext } = this.props;
-    const { token } = userContext;
+    const token = localStorage.getItem('authToken');
     return (
       <AppBar position="static">
         <Toolbar>

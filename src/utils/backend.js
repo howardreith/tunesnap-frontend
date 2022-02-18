@@ -89,6 +89,19 @@ export async function getAccompanimentAtId(id, token) {
   throw Error(`getAccompanimentAtId ${id} was unsuccessful`);
 }
 
+export async function getUserInfo(token) {
+  const result = await fetch(`${backendUrl}/user/info`, {
+    method: 'get',
+    headers: {
+      Authorization: token ? `Bearer ${token}` : null,
+    },
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('getUserInfo was unsuccessful');
+}
+
 export async function getCart(token) {
   const result = await fetch(`${backendUrl}/user/cart`, {
     method: 'get',

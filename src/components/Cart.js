@@ -19,15 +19,15 @@ class Cart extends Component {
   }
 
   async componentDidMount() {
-    const { userContext } = this.props;
-    const { token } = userContext;
+    const token = localStorage.getItem('authToken');
     const cartContents = (await getCart(token)).data;
     this.setState({ cartContents });
   }
 
   async removeAccompanimentFromCart(accompanimentId) {
     const { userContext } = this.props;
-    const { token, setCart } = userContext;
+    const { setCart } = userContext;
+    const token = localStorage.getItem('authToken');
     const cartContents = (await removeAccompanimentFromCart(accompanimentId, token)).data;
     this.setState({ cartContents });
     const justTheIds = cartContents.map((accomp) => accomp._id);
@@ -41,8 +41,8 @@ class Cart extends Component {
 
   render() {
     // TODO check in on why accompaniments count keeps going up
-    const { history, userContext } = this.props;
-    const { token } = userContext;
+    const { history } = this.props;
+    const token = localStorage.getItem('authToken');
     if (!token) {
       history.push('/login');
     }

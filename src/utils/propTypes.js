@@ -13,6 +13,5 @@ export const MatchPropType = PropTypes.shape({
 
 export const UserContextPropType = PropTypes.shape({
   email: PropTypes.string,
-  token: PropTypes.string,
   setUserInfo: PropTypes.func.isRequired,
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { addAccompanimentToCart } from '../utils/backend';
+import { addAccompanimentToCart, getUserInfo } from '../utils/backend';
 
 export const UserContext = React.createContext();
 
@@ -15,7 +15,6 @@ export default class UserContextProvider extends React.Component {
 
     this.state = {
       email: '',
-      token: null,
       displayName: '',
       accompanimentSubmissions: [],
       favoriteSongs: [],
@@ -25,10 +24,17 @@ export default class UserContextProvider extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    const token = localStorage.getItem('authToken');
+    if (token && !this.state.email) {
+      const { data } = await getUserInfo(token);
+      this.setUserInfo(data);
+    }
+  }
+
   setUserInfo(userInfo) {
     const {
       email,
-      token,
       displayName,
       accompanimentSubmissions,
       favoriteSongs,
@@ -38,7 +44,6 @@ export default class UserContextProvider extends React.Component {
     } = userInfo;
     this.setState({
       email,
-      token,
       displayName,
       accompanimentSubmissions,
       favoriteSongs,
@@ -53,7 +58,7 @@ export default class UserContextProvider extends React.Component {
   }
 
   async addAccompanimentToCart(accompanimentId) {
-    const { token } = this.state;
+    const token = localStorage.getItem('authToken');
     const result = await addAccompanimentToCart(accompanimentId, token);
     this.setCart(result.data);
   }
