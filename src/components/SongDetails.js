@@ -64,7 +64,8 @@ class SongDetails extends Component {
 
   handleAddToCart(e, id) {
     const { userContext, history } = this.props;
-    const { token, addAccompanimentToCart } = userContext;
+    const token = localStorage.getItem('authToken');
+    const { addAccompanimentToCart } = userContext;
     if (!token) {
       history.push('/login');
     } else {

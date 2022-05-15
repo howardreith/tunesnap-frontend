@@ -68,12 +68,29 @@ export async function addAccompaniment(accompanimentData, token) {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
+    // This is formData, do not stringify
     body: accompanimentData,
   });
   if (result.ok) {
     return result.json();
   }
   throw Error(`Accompaniment ${JSON.stringify(accompanimentData)} could not be created.`);
+}
+
+export async function createSale(saleData, token) {
+  const result = await fetch(`${backendUrl}/sale`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(saleData),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  return new Error(`Accompaniment ${JSON.stringify(saleData)} could not be created.`);
 }
 
 export async function getAccompanimentAtId(id, token) {

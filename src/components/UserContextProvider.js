@@ -1,10 +1,11 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { addAccompanimentToCart, getUserInfo } from '../utils/backend';
 
 export const UserContext = React.createContext();
 
-export default class UserContextProvider extends React.Component {
+class UserContextProvider extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,6 +13,7 @@ export default class UserContextProvider extends React.Component {
     this.updateAccompanimentsSubmittedAndOwned = this.updateAccompanimentsSubmittedAndOwned.bind(this);
     this.addAccompanimentToCart = this.addAccompanimentToCart.bind(this);
     this.setCart = this.setCart.bind(this);
+    this.updateAccompanimentsOwnedAndCart = this.updateAccompanimentsOwnedAndCart.bind(this);
 
     this.state = {
       email: '',
@@ -26,9 +28,16 @@ export default class UserContextProvider extends React.Component {
 
   async componentDidMount() {
     const token = localStorage.getItem('authToken');
-    if (token && !this.state.email) {
-      const { data } = await getUserInfo(token);
-      this.setUserInfo(data);
+    const { email } = this.state;
+    if (token && !email) {
+      try {
+        const { data } = await getUserInfo(token);
+        this.setUserInfo(data);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Your session has expired. Please log back in for personalized features.');
+        localStorage.removeItem('authToken');
+      }
     }
   }
 
@@ -63,6 +72,11 @@ export default class UserContextProvider extends React.Component {
     this.setCart(result.data);
   }
 
+  updateAccompanimentsOwnedAndCart(update) {
+    const { cart, accompanimentsOwned } = update;
+    this.setState({ cart, accompanimentsOwned });
+  }
+
   updateAccompanimentsSubmittedAndOwned(update) {
     const { accompanimentSubmissions, accompanimentsOwned } = update;
     this.setState({ accompanimentSubmissions, accompanimentsOwned });
@@ -77,6 +91,7 @@ export default class UserContextProvider extends React.Component {
         updateAccompanimentsSubmittedAndOwned: this.updateAccompanimentsSubmittedAndOwned,
         addAccompanimentToCart: this.addAccompanimentToCart,
         setCart: this.setCart,
+        updateAccompanimentsOwnedAndCart: this.updateAccompanimentsOwnedAndCart,
       }}
       >
         {children}
@@ -84,6 +99,8 @@ export default class UserContextProvider extends React.Component {
     );
   }
 }
+
+export default withRouter(UserContextProvider);
 
 UserContextProvider.propTypes = {
   children: PropTypes.oneOfType([
