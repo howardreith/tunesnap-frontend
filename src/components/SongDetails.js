@@ -48,20 +48,6 @@ class SongDetails extends Component {
     }
   }
 
-  async fetchSongData() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
-    const song = (await getSongAtId(id)).data;
-    this.updateSong(song);
-  }
-
-  updateSong(song) {
-    if (this._isMounted) {
-      this.setState({ song });
-    }
-  }
-
   handleAddToCart(e, id) {
     const { userContext, history } = this.props;
     const token = localStorage.getItem('authToken');
@@ -71,6 +57,20 @@ class SongDetails extends Component {
     } else {
       addAccompanimentToCart(id);
     }
+  }
+
+  updateSong(song) {
+    if (this._isMounted) {
+      this.setState({ song });
+    }
+  }
+
+  async fetchSongData() {
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
+    const song = (await getSongAtId(id)).data;
+    this.updateSong(song);
   }
 
   render() {
@@ -83,24 +83,29 @@ class SongDetails extends Component {
     if (!song) {
       return <div><span>Loading...</span></div>;
     }
+    const {
+      _id, title, composer, opusNumber, lyricist, fach, songCycle, role, textAndTranslation, accompaniments,
+    } = song;
     return (
       <Box>
-        <Typography variant="h1">{song.title}</Typography>
+        <Typography variant="h1">{title}</Typography>
+        {songCycle && <Typography variant="h3">{`From ${songCycle}`}</Typography>}
         <Typography variant="h3">
-          {`Music by ${song.composer}`}
+          {`Music by ${composer}`}
         </Typography>
-        <Typography variant="h5">{song.opusNumber}</Typography>
-        <Typography variant="h3">{`Lyrics by ${song.lyricist}`}</Typography>
+        {opusNumber && <Typography variant="h5">{opusNumber}</Typography>}
+        {lyricist && <Typography variant="h3">{`Lyrics by ${lyricist}`}</Typography>}
+        {role && fach && <Typography variant="h5">{`Role: ${role} - ${fach}`}</Typography>}
         <Typography variant="h5">
           <a
             target="_blank"
-            href={song.textAndTranslation}
+            href={textAndTranslation}
             rel="noopener noreferrer"
           >
-            Translations available at Lieder.net
+            Text/Translation
           </a>
         </Typography>
-        {showAddAccompanimentForm && <AddAccompanimentForm songId={song._id} onUpdateSong={this.updateSong} />}
+        {showAddAccompanimentForm && <AddAccompanimentForm songId={_id} onUpdateSong={this.updateSong} />}
         <Box margin={1}>
           <Button
             variant="contained"
@@ -124,7 +129,7 @@ class SongDetails extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {song.accompaniments && song.accompaniments.filter((accomp) => accomp)
+            {accompaniments && accompaniments.filter((accomp) => accomp)
               .map((accomp, i) => {
                 const accompanimentIsLocal = !accomp.url;
                 const accompanimentCostsMoney = accomp.price > 0;
