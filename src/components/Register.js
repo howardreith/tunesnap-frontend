@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import {
   Typography, Box, FormControl, Button, TextField,
-} from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+} from '@mui/material';
+import withRouter from '../utils/withRouter';
 import { HistoryPropType } from '../utils/propTypes';
 import { register } from '../utils/backend';
 
@@ -66,7 +66,7 @@ class Register extends Component {
     const { history } = this.props;
     register(email, password, displayName)
       .then(() => {
-        history.push('/login');
+        history.navigate('/login');
       })
       .catch((error) => {
         // eslint-disable-next-line no-console

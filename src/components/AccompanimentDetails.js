@@ -1,13 +1,14 @@
 /* eslint-disable react/no-array-index-key */
+
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Box, Typography, Button,
-} from '@material-ui/core';
+} from '@mui/material';
 // import { getAccompanimentAtId } from '../utils/backend';
 import { HistoryPropType, MatchPropType, UserContextPropType } from '../utils/propTypes';
 import { withUserContext } from './UserContextProvider';
 import { getAccompanimentAtId, getAccompanimentFileAtId } from '../utils/backend';
+import withRouter from '../utils/withRouter';
 
 class AccompanimentDetails extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class AccompanimentDetails extends Component {
     const { accompaniment } = this.state;
     const id = accompaniment._id;
     if (!token) {
-      history.push('/login');
+      history.navigate('/login');
     } else {
       addAccompanimentToCart(id);
     }

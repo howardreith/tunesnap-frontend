@@ -1,6 +1,5 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { addAccompanimentToCart, getUserInfo } from '../utils/backend';
 
 export const UserContext = React.createContext();
@@ -85,6 +84,7 @@ class UserContextProvider extends React.Component {
   render() {
     const { children } = this.props;
     return (
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
       <UserContext.Provider value={{
         ...this.state,
         setUserInfo: this.setUserInfo,
@@ -100,7 +100,7 @@ class UserContextProvider extends React.Component {
   }
 }
 
-export default withRouter(UserContextProvider);
+export default UserContextProvider;
 
 UserContextProvider.propTypes = {
   children: PropTypes.oneOfType([

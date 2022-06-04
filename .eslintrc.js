@@ -1,11 +1,12 @@
 module.exports = {
   env: {
     browser: true,
-    "es6": true,
-    "jest/globals": true
+    es6: true,
+    jest: true,
   },
   extends: [
     'plugin:react/recommended',
+    'eslint:recommended',
     'airbnb',
   ],
   parserOptions: {
@@ -17,13 +18,12 @@ module.exports = {
   },
   plugins: [
     'react',
-    'jest',
   ],
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
-    "react/jsx-props-no-spreading": "off",
+    'react/jsx-props-no-spreading': 'off',
     'no-underscore-dangle': 0,
-    'max-len': ["error", { "code": 120 }],
+    'max-len': ['error', { code: 120 }],
     'jsx-a11y/media-has-caption': 0,
   },
 };

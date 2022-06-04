@@ -2,11 +2,10 @@
 import React, { Component } from 'react';
 import {
   Typography, Box, FormControl, Button, TextField,
-} from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+} from '@mui/material';
+import withRouter from '../utils/withRouter';
+import { HistoryPropType } from '../utils/propTypes';
 import { updatePassword } from '../utils/backend';
-import { withUserContext } from './UserContextProvider';
 
 class UserSettings extends Component {
   constructor(props) {
@@ -61,7 +60,7 @@ class UserSettings extends Component {
     const { history } = this.props;
     const token = localStorage.getItem('authToken');
     if (!token) {
-      history.push('/login');
+      history.navigate('/login');
     }
     const {
       newPassword, confirmNewPassword,
@@ -98,9 +97,8 @@ class UserSettings extends Component {
   }
 }
 
-export default withRouter(withUserContext(UserSettings));
+export default withRouter(UserSettings);
 
 UserSettings.propTypes = {
   history: HistoryPropType.isRequired,
-  userContext: UserContextPropType.isRequired,
 };

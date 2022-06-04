@@ -1,12 +1,12 @@
-/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import {
   Typography, Box, FormControl, Button, TextField,
-} from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+} from '@mui/material';
+import withRouter from '../utils/withRouter';
+import { ErrorContextPropType, HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import { login } from '../utils/backend';
 import { withUserContext } from './UserContextProvider';
+import { withErrorContext } from './ErrorHandler';
 
 class Login extends Component {
   constructor(props) {
@@ -15,9 +15,10 @@ class Login extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setError = this.setError.bind(this);
 
     this.state = {
-      email: '', password: '',
+      email: '', password: '', error: '',
     };
   }
 
@@ -33,7 +34,8 @@ class Login extends Component {
 
   async handleSubmit(e) {
     const { email, password } = this.state;
-    const { userContext, history } = this.props;
+    const { userContext, history, errorContext } = this.props;
+    const { setError } = errorContext;
     e.preventDefault();
     login(email, password)
       .then((res) => {
@@ -60,13 +62,16 @@ class Login extends Component {
         if (history.action !== 'POP') {
           history.goBack();
         } else {
-          history.push('/');
+          history.navigate('/');
         }
       })
       .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error('Error signing in: ', error);
+        setError(`${error.message}`);
       });
+  }
+
+  setError(error) {
+    this.setState((state) => ({ ...state, error }));
   }
 
   render() {
@@ -102,9 +107,10 @@ class Login extends Component {
   }
 }
 
-export default withRouter(withUserContext(Login));
+export default withRouter(withErrorContext(withUserContext(Login)));
 
 Login.propTypes = {
   userContext: UserContextPropType.isRequired,
   history: HistoryPropType.isRequired,
+  errorContext: ErrorContextPropType.isRequired,
 };

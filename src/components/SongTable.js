@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, TablePagination, TextField, Box,
-} from '@material-ui/core';
+} from '@mui/material';
+import withRouter from '../utils/withRouter';
 import { HistoryPropType } from '../utils/propTypes';
 import { getSongViaAutocomplete } from '../utils/backend';
 
@@ -52,9 +52,8 @@ class SongTable extends Component {
 
   handleSeeAccompanimentsClick(e) {
     const { history } = this.props;
-    const { push } = history;
     const songId = e.target.id.replace('Button', '').replace('Accompaniments', '');
-    push(`/songs/${songId}`);
+    history.navigate(`/songs/${songId}`);
   }
 
   async handleTitleSearchChange(e) {

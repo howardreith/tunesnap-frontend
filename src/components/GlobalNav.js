@@ -1,11 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar, Toolbar, Button, Box,
-} from '@material-ui/core';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
-import { withUserContext } from './UserContextProvider';
+} from '@mui/material';
+import withRouter from '../utils/withRouter';
+import { HistoryPropType } from '../utils/propTypes';
 
 class GlobalNav extends Component {
   constructor(props) {
@@ -23,32 +22,38 @@ class GlobalNav extends Component {
 
   handleBackClick() {
     const { history } = this.props;
-    history.goBack();
+    const { navigate } = history;
+    navigate(-1);
   }
 
   handleLogInClick() {
     const { history } = this.props;
-    history.push('/login');
+    const { navigate } = history;
+    navigate('/login');
   }
 
   handleSignUpClick() {
     const { history } = this.props;
-    history.push('/register');
+    const { navigate } = history;
+    navigate('/register');
   }
 
   handleHomeClick() {
     const { history } = this.props;
-    history.push('/');
+    const { navigate } = history;
+    navigate('/');
   }
 
   handleUserSettingsClick() {
     const { history } = this.props;
-    history.push('/settings');
+    const { navigate } = history;
+    navigate('/settings');
   }
 
   handleCartClick() {
     const { history } = this.props;
-    history.push('/cart');
+    const { navigate } = history;
+    navigate('/cart');
   }
 
   render() {
@@ -90,9 +95,8 @@ class GlobalNav extends Component {
   }
 }
 
-export default withRouter(withUserContext(GlobalNav));
+export default withRouter(GlobalNav);
 
 GlobalNav.propTypes = {
   history: HistoryPropType.isRequired,
-  userContext: UserContextPropType.isRequired,
 };

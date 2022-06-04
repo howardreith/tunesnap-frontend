@@ -1,13 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
-} from '@material-ui/core';
+} from '@mui/material';
 import { PayPalButtons } from '@paypal/react-paypal-js';
 import { createSale, getCart, removeAccompanimentFromCart } from '../utils/backend';
 import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import { withUserContext } from './UserContextProvider';
+import withRouter from '../utils/withRouter';
 
 class Cart extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ class Cart extends Component {
     const { history } = this.props;
     const token = localStorage.getItem('authToken');
     if (!token) {
-      history.push('/login');
+      history.navigate('/login');
     }
 
     const { cartContents, saleId } = this.state;

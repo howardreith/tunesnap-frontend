@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
 import {
   Typography, Box, FormControl, Button, TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 import { addAccompaniment } from '../utils/backend';
 import { withUserContext } from './UserContextProvider';
 import { UserContextPropType } from '../utils/propTypes';

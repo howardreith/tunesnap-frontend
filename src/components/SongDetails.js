@@ -1,13 +1,13 @@
-/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
-} from '@material-ui/core';
+} from '@mui/material';
 import { getSongAtId } from '../utils/backend';
-import { HistoryPropType, MatchPropType, UserContextPropType } from '../utils/propTypes';
+import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
 import { withUserContext } from './UserContextProvider';
+import withRouter from '../utils/withRouter';
 
 class SongDetails extends Component {
   constructor(props) {
@@ -22,15 +22,14 @@ class SongDetails extends Component {
 
   async componentDidMount() {
     this._isMounted = true;
-    const { match, history } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { history } = this.props;
+    const { id } = history.params;
     try {
       await this.fetchSongData();
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(`Song at ${id} not found`);
-      history.push('/');
+      history.navigate('/');
     }
   }
 
@@ -42,7 +41,7 @@ class SongDetails extends Component {
     const { history } = this.props;
     const token = localStorage.getItem('authToken');
     if (!token) {
-      history.push('/login');
+      history.navigate('/login');
     } else {
       this.setState((state) => ({ ...state, showAddAccompanimentForm: !state.showAddAccompanimentForm }));
     }
@@ -53,7 +52,7 @@ class SongDetails extends Component {
     const token = localStorage.getItem('authToken');
     const { addAccompanimentToCart } = userContext;
     if (!token) {
-      history.push('/login');
+      history.navigate('/login');
     } else {
       addAccompanimentToCart(id);
     }
@@ -66,9 +65,8 @@ class SongDetails extends Component {
   }
 
   async fetchSongData() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { history } = this.props;
+    const { id } = history.params;
     const song = (await getSongAtId(id)).data;
     this.updateSong(song);
   }
@@ -203,6 +201,5 @@ export default withRouter(withUserContext(SongDetails));
 
 SongDetails.propTypes = {
   history: HistoryPropType.isRequired,
-  match: MatchPropType.isRequired,
   userContext: UserContextPropType.isRequired,
 };

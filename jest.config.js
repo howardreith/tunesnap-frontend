@@ -1,7 +1,10 @@
-const { defaults } = require('jest-config');
-
 module.exports = {
-  // ...
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
-  // ...
+  moduleFileExtensions: ['js', 'jsx'],
+  moduleNameMapper: {
+    '\\.(css|less)$': '<rootDir>/src/utils/styleMock.js',
+  },
+  testEnvironment: 'jest-environment-jsdom',
+  setupFilesAfterEnv: [
+    '<rootDir>/src/setupTests.js',
+  ],
 };
