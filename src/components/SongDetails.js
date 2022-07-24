@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@mui/material';
-import { getSongAtId } from '../utils/backend';
+import { getSongAtId, requestAccompaniment } from '../utils/backend';
 import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
 import { withUserContext } from './UserContextProvider';
@@ -16,6 +16,7 @@ class SongDetails extends Component {
     this.updateSong = this.updateSong.bind(this);
     this.handleToggleAddAccompanimentForm = this.handleToggleAddAccompanimentForm.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.requestAccompaniment = this.requestAccompaniment.bind(this);
 
     this.state = { song: null, showAddAccompanimentForm: false };
   }
@@ -71,10 +72,19 @@ class SongDetails extends Component {
     this.updateSong(song);
   }
 
+  async requestAccompaniment() {
+    const { history, userContext } = this.props;
+    const { id } = history.params;
+    const { updateRequestedAccompaniments } = userContext;
+    const token = localStorage.getItem('authToken');
+    const updatedUserRequestList = (await requestAccompaniment(id, token)).data;
+    updateRequestedAccompaniments(updatedUserRequestList);
+  }
+
   render() {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
-    const { cart, accompanimentsOwned } = userContext;
+    const { cart, accompanimentsOwned, requestedAccompaniments } = userContext;
     const token = localStorage.getItem('authToken');
     const accompanimentsOwnedIds = accompanimentsOwned.map((acc) => acc.accompaniment);
     const frontEndUrl = process.env.REACT_APP_FRONTEND_URL;
@@ -110,6 +120,14 @@ class SongDetails extends Component {
             onClick={this.handleToggleAddAccompanimentForm}
           >
             {showAddAccompanimentForm ? 'Hide Form' : 'Add New Accompaniment'}
+          </Button>
+        </Box>
+        <Box margin={1}>
+          <Button
+            variant="contained"
+            onClick={this.requestAccompaniment}
+          >
+            {requestedAccompaniments?.includes(_id) ? 'Accompaniment Requested' : 'Request Accompaniment'}
           </Button>
         </Box>
         <Table>

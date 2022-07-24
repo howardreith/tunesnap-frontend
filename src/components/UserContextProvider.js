@@ -13,6 +13,7 @@ class UserContextProvider extends React.Component {
     this.addAccompanimentToCart = this.addAccompanimentToCart.bind(this);
     this.setCart = this.setCart.bind(this);
     this.updateAccompanimentsOwnedAndCart = this.updateAccompanimentsOwnedAndCart.bind(this);
+    this.updateRequestedAccompaniments = this.updateRequestedAccompaniments.bind(this);
 
     this.state = {
       email: '',
@@ -22,6 +23,7 @@ class UserContextProvider extends React.Component {
       favoriteAccompaniments: [],
       cart: [],
       accompanimentsOwned: [],
+      requestedAccompaniments: [],
     };
   }
 
@@ -49,6 +51,7 @@ class UserContextProvider extends React.Component {
       favoriteAccompaniments,
       cart,
       accompanimentsOwned,
+      requestedAccompaniments,
     } = userInfo;
     this.setState({
       email,
@@ -58,11 +61,16 @@ class UserContextProvider extends React.Component {
       favoriteAccompaniments,
       cart,
       accompanimentsOwned,
+      requestedAccompaniments,
     });
   }
 
   setCart(cart) {
     this.setState({ cart });
+  }
+
+  updateRequestedAccompaniments(updatedList) {
+    this.setState({ requestedAccompaniments: updatedList });
   }
 
   async addAccompanimentToCart(accompanimentId) {
@@ -92,6 +100,7 @@ class UserContextProvider extends React.Component {
         addAccompanimentToCart: this.addAccompanimentToCart,
         setCart: this.setCart,
         updateAccompanimentsOwnedAndCart: this.updateAccompanimentsOwnedAndCart,
+        updateRequestedAccompaniments: this.updateRequestedAccompaniments,
       }}
       >
         {children}
