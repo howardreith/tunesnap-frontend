@@ -77,6 +77,22 @@ export async function requestAccompaniment(songId, token) {
   throw Error(`Song ${JSON.stringify(songId)} could not be requested for accompaniment.`);
 }
 
+export async function unrequestAccompaniment(songId, token) {
+  const result = await fetch(`${backendUrl}/song/unrequest`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id: songId }),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`Song ${JSON.stringify(songId)} could not be unrequested for accompaniment.`);
+}
+
 export async function addAccompaniment(accompanimentData, token) {
   const result = await fetch(`${backendUrl}/accompaniment/create`, {
     method: 'post',
