@@ -65,7 +65,7 @@ class SongDetails extends Component {
     const { updateRequestedAccompaniments, requestedAccompaniments } = userContext;
     const token = localStorage.getItem('authToken');
     let updatedUserRequestList;
-    if (requestedAccompaniments.includes(id)) {
+    if (requestedAccompaniments.map((acc) => acc.songId).includes(id)) {
       updatedUserRequestList = (await unrequestAccompaniment(id, token)).data;
     } else {
       updatedUserRequestList = (await requestAccompaniment(id, token)).data;
@@ -132,7 +132,7 @@ class SongDetails extends Component {
             variant="contained"
             onClick={this.handleRequestAccompanimentButtonClick}
           >
-            {requestedAccompaniments && requestedAccompaniments.includes(_id)
+            {requestedAccompaniments && requestedAccompaniments.map((req) => req.songId).includes(_id)
               ? 'Cancel Request Accompaniment' : 'Request Accompaniment'}
           </Button>
         </Box>
