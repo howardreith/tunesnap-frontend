@@ -59,8 +59,9 @@ class Login extends Component {
           cart,
           accompanimentsOwned,
         });
-        if (history.action !== 'POP') {
-          history.goBack();
+        const relevantLocations = history.locationsArray.filter((loc) => loc !== '/login');
+        if (relevantLocations.length !== 0) {
+          history.navigate(relevantLocations[relevantLocations.length - 1]);
         } else {
           history.navigate('/');
         }

@@ -80,7 +80,7 @@ class Register extends Component {
     } = this.state;
     return (
       <Box>
-        <Typography variant="h1">Log In</Typography>
+        <Typography variant="h1">Sign Up</Typography>
         <form id="loginForm" onSubmit={this.handleSubmit}>
           <FormControl>
             <TextField

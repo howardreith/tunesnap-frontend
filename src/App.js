@@ -4,7 +4,6 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import AddSongForm from './components/AddSongForm';
 import SongTable from './components/SongTable';
 import SongDetails from './components/SongDetails';
-// import Admin from './components/Admin';
 import GlobalNav from './components/GlobalNav';
 import Login from './components/Login';
 import UserContextProvider from './components/UserContextProvider';
@@ -13,8 +12,9 @@ import UserSettings from './components/UserSettings';
 import AccompanimentDetails from './components/AccompanimentDetails';
 import Cart from './components/Cart';
 import ErrorHandler, { ErrorContextProvider } from './components/ErrorHandler';
+import LandingPage from './components/LandingPage';
+import { RouterProvider } from './utils/withRouter';
 
-// TODO The SongTable should eventually be a /songs or something
 function App() {
   const paypalOptions = {
     // TODO this should be an env variable or something
@@ -33,17 +33,20 @@ function App() {
         >
           <UserContextProvider>
             <BrowserRouter>
-              <GlobalNav />
-              <Routes>
-                <Route exact path="/login" element={<Login />} />
-                <Route exact path="/register" element={<Register />} />
-                <Route exact path="/" element={<SongTable />} />
-                <Route path="/songs/add" element={<AddSongForm />} />
-                <Route path="/songs/:id" element={<SongDetails />} />
-                <Route path="/accompaniments/:id" element={<AccompanimentDetails />} />
-                <Route exact path="/settings" element={<UserSettings />} />
-                <Route exact path="/cart" element={<Cart />} />
-              </Routes>
+              <RouterProvider>
+                <GlobalNav />
+                <Routes>
+                  <Route exact path="/login" element={<Login />} />
+                  <Route exact path="/register" element={<Register />} />
+                  <Route exact path="/" element={<LandingPage />} />
+                  <Route exact path="/songs" element={<SongTable />} />
+                  <Route path="/songs/add" element={<AddSongForm />} />
+                  <Route path="/songs/:id" element={<SongDetails />} />
+                  <Route path="/accompaniments/:id" element={<AccompanimentDetails />} />
+                  <Route exact path="/settings" element={<UserSettings />} />
+                  <Route exact path="/cart" element={<Cart />} />
+                </Routes>
+              </RouterProvider>
             </BrowserRouter>
           </UserContextProvider>
         </PayPalScriptProvider>

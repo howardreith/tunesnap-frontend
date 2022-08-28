@@ -89,6 +89,7 @@ class SongDetails extends Component {
   render() {
     const { song, showAddAccompanimentForm } = this.state;
     const { userContext } = this.props;
+    const isLoggedIn = !!userContext.email;
     const { cart, accompanimentsOwned, requestedAccompaniments } = userContext;
     const token = localStorage.getItem('authToken');
     const accompanimentsOwnedIds = accompanimentsOwned.map((acc) => acc.accompaniment);
@@ -127,6 +128,7 @@ class SongDetails extends Component {
             {showAddAccompanimentForm ? 'Hide Form' : 'Add New Accompaniment'}
           </Button>
         </Box>
+        {isLoggedIn && (
         <Box margin={1}>
           <Button
             variant="contained"
@@ -136,6 +138,7 @@ class SongDetails extends Component {
               ? 'Cancel Request Accompaniment' : 'Request Accompaniment'}
           </Button>
         </Box>
+        )}
         <Table>
           <TableHead>
             <TableRow>
