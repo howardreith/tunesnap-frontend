@@ -61,7 +61,7 @@ class SongDetails extends Component {
 
   async handleRequestAccompanimentButtonClick() {
     const { history, userContext } = this.props;
-    const { id } = history.params;
+    const id = history.location.pathname.replace('/songs/', '');
     const { updateRequestedAccompaniments, requestedAccompaniments } = userContext;
     const token = localStorage.getItem('authToken');
     let updatedUserRequestList;

@@ -222,15 +222,18 @@ export async function getSongAtId(id) {
 export async function getSongViaAutocomplete({
   titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
 }) {
-  const result = await fetch(`${backendUrl}/songs/search`, {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
-    }),
+  let url = `${backendUrl}/search?sortBy=${sortBy}&page=${page}`;
+  if (titleSearchValue) {
+    url = `${url}&titleSearchValue=${titleSearchValue}`;
+  }
+  if (composerSearchValue) {
+    url = `${url}&composerSearchValue=${composerSearchValue}`;
+  }
+  if (songSetSearchValue) {
+    url = `${url}&songSetSearchValue=${songSetSearchValue}`;
+  }
+  const result = await fetch(url, {
+    method: 'get',
   });
 
   if (result.ok) {

@@ -14,6 +14,7 @@ import Cart from './components/Cart';
 import ErrorHandler, { ErrorContextProvider } from './components/ErrorHandler';
 import LandingPage from './components/LandingPage';
 import { RouterProvider } from './utils/withRouter';
+import MusicianPage from './components/MusicianPage';
 
 function App() {
   const paypalOptions = {
@@ -40,6 +41,7 @@ function App() {
                   <Route exact path="/register" element={<Register />} />
                   <Route exact path="/" element={<LandingPage />} />
                   <Route exact path="/songs" element={<SongTable />} />
+                  <Route exact path="/musician" element={<MusicianPage />} />
                   <Route path="/songs/add" element={<AddSongForm />} />
                   <Route path="/songs/:id" element={<SongDetails />} />
                   <Route path="/accompaniments/:id" element={<AccompanimentDetails />} />
