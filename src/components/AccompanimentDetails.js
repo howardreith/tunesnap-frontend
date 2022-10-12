@@ -5,7 +5,7 @@ import {
   Box, Typography, Button,
 } from '@mui/material';
 // import { getAccompanimentAtId } from '../utils/backend';
-import { HistoryPropType, MatchPropType, UserContextPropType } from '../utils/propTypes';
+import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import { withUserContext } from './UserContextProvider';
 import { getAccompanimentAtId, getAccompanimentFileAtId } from '../utils/backend';
 import withRouter from '../utils/withRouter';
@@ -41,9 +41,8 @@ class AccompanimentDetails extends Component {
   }
 
   fetchAccompanimentData() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { history } = this.props;
+    const id = history.location.pathname.replace('/accompaniments/', '');
     const token = localStorage.getItem('authToken');
     getAccompanimentAtId(id, token).then((res) => {
       this.updateAccompaniment(res.data);
@@ -54,9 +53,8 @@ class AccompanimentDetails extends Component {
   }
 
   fetchAccompanimentDownload() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { history } = this.props;
+    const id = history.location.pathname.replace('/accompaniments/', '');
     const token = localStorage.getItem('authToken');
     getAccompanimentFileAtId(id, token)
       .then((res) => res.blob())
@@ -168,6 +166,5 @@ export default withRouter(withUserContext(AccompanimentDetails));
 
 AccompanimentDetails.propTypes = {
   history: HistoryPropType.isRequired,
-  match: MatchPropType.isRequired,
   userContext: UserContextPropType.isRequired,
 };

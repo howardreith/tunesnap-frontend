@@ -7,12 +7,6 @@ export const HistoryPropType = PropTypes.shape({
   params: PropTypes.shape({}).isRequired,
 });
 
-export const MatchPropType = PropTypes.shape({
-  params: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
-});
-
 export const UserContextPropType = PropTypes.shape({
   email: PropTypes.string,
   setUserInfo: PropTypes.func.isRequired,

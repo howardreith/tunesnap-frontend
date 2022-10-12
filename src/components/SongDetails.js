@@ -24,7 +24,7 @@ class SongDetails extends Component {
   async componentDidMount() {
     this._isMounted = true;
     const { history } = this.props;
-    const { id } = history.params;
+    const id = history.location.pathname.replace('/songs/', '');
     try {
       await this.fetchSongData();
     } catch (e) {
@@ -75,7 +75,7 @@ class SongDetails extends Component {
 
   async fetchSongData() {
     const { history } = this.props;
-    const { id } = history.params;
+    const id = history.location.pathname.replace('/songs/', '');
     const song = (await getSongAtId(id)).data;
     this.updateSong(song);
   }

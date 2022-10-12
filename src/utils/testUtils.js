@@ -1,5 +1,7 @@
-export * from '@testing-library/react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+export * from '@testing-library/react';
 
 export function asyncFlush() {
-  return new Promise(resolve => setTimeout(resolve, 0));
+  // eslint-disable-next-line no-promise-executor-return
+  return new Promise((resolve) => setTimeout(resolve, 0));
 }
