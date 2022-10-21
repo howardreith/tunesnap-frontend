@@ -79,7 +79,7 @@ class MusicianPage extends Component {
               </TableHead>
               <TableBody>
                 {songsSortedByNumberOfRequests.map((song) => (
-                  <TableRow>
+                  <TableRow key={`requestsRow${song._id}`}>
                     <TableCell>
                       <Link to={`/songs/${song._id}`}>
                         {song.title}
@@ -124,7 +124,7 @@ class MusicianPage extends Component {
               </TableHead>
               <TableBody>
                 {songsSortedByRecency.map((song) => (
-                  <TableRow>
+                  <TableRow key={`recencyRow${song._id}`}>
                     <TableCell>
                       <Link to={`/songs/${song._id}`}>
                         {song.title}
