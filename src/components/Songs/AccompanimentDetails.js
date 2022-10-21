@@ -5,10 +5,10 @@ import {
   Box, Typography, Button,
 } from '@mui/material';
 // import { getAccompanimentAtId } from '../utils/backend';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
-import { withUserContext } from './UserContextProvider';
-import { getAccompanimentAtId, getAccompanimentFileAtId } from '../utils/backend';
-import withRouter from '../utils/withRouter';
+import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
+import { withUserContext } from '../User/UserContextProvider';
+import { getAccompanimentAtId, getAccompanimentFileAtId } from '../../utils/backend';
+import withRouter from '../../utils/withRouter';
 
 class AccompanimentDetails extends Component {
   constructor(props) {

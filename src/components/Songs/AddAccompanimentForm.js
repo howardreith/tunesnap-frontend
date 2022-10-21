@@ -4,9 +4,9 @@ import * as PropTypes from 'prop-types';
 import {
   Typography, Box, FormControl, Button, TextField,
 } from '@mui/material';
-import { addAccompaniment } from '../utils/backend';
-import { withUserContext } from './UserContextProvider';
-import { UserContextPropType } from '../utils/propTypes';
+import { addAccompaniment } from '../../utils/backend';
+import { withUserContext } from '../User/UserContextProvider';
+import { UserContextPropType } from '../../utils/propTypes';
 
 const FORM_OPTIONS = {
   LINK_FORM: 'linkForm',

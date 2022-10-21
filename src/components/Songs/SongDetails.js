@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@mui/material';
-import { getSongAtId, requestAccompaniment, unrequestAccompaniment } from '../utils/backend';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+import { getSongAtId, requestAccompaniment, unrequestAccompaniment } from '../../utils/backend';
+import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
 import AddAccompanimentForm from './AddAccompanimentForm';
-import { withUserContext } from './UserContextProvider';
-import withRouter from '../utils/withRouter';
+import { withUserContext } from '../User/UserContextProvider';
+import withRouter from '../../utils/withRouter';
 
 class SongDetails extends Component {
   constructor(props) {

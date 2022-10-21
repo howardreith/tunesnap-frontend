@@ -5,7 +5,7 @@ import {
 import withRouter from '../utils/withRouter';
 import { ErrorContextPropType, HistoryPropType, UserContextPropType } from '../utils/propTypes';
 import { login } from '../utils/backend';
-import { withUserContext } from './UserContextProvider';
+import { withUserContext } from './User/UserContextProvider';
 import { withErrorContext } from './ErrorHandler';
 
 class Login extends Component {
@@ -48,6 +48,7 @@ class Login extends Component {
           favoriteAccompaniments,
           cart,
           accompanimentsOwned,
+          requestedAccompaniments,
         } = res.data;
         localStorage.setItem('authToken', token);
         userContext.setUserInfo({
@@ -58,6 +59,7 @@ class Login extends Component {
           favoriteAccompaniments,
           cart,
           accompanimentsOwned,
+          requestedAccompaniments,
         });
         const relevantLocations = history.locationsArray.filter((loc) => loc !== '/login');
         if (relevantLocations.length !== 0) {

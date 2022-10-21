@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import {
   Typography, Box, FormControl, Button, TextField,
 } from '@mui/material';
-import withRouter from '../utils/withRouter';
-import { HistoryPropType } from '../utils/propTypes';
-import { updatePassword } from '../utils/backend';
+import withRouter from '../../utils/withRouter';
+import { HistoryPropType } from '../../utils/propTypes';
+import { updatePassword } from '../../utils/backend';
 
 class UserSettings extends Component {
   constructor(props) {

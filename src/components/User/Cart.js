@@ -5,10 +5,10 @@ import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@mui/material';
 import { PayPalButtons } from '@paypal/react-paypal-js';
-import { createSale, getCart, removeAccompanimentFromCart } from '../utils/backend';
-import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+import { createSale, getCart, removeAccompanimentFromCart } from '../../utils/backend';
+import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
 import { withUserContext } from './UserContextProvider';
-import withRouter from '../utils/withRouter';
+import withRouter from '../../utils/withRouter';
 
 class Cart extends Component {
   constructor(props) {

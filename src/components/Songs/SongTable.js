@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import {
   Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, TablePagination, TextField, Box,
 } from '@mui/material';
-import withRouter from '../utils/withRouter';
-import { HistoryPropType } from '../utils/propTypes';
-import { getSongViaAutocomplete } from '../utils/backend';
+import withRouter from '../../utils/withRouter';
+import { HistoryPropType } from '../../utils/propTypes';
+import { getSongsBySearchParams } from '../../utils/backend';
 
 const SORT_OPTIONS = {
   TITLE: 'title',
@@ -143,7 +143,7 @@ class SongTable extends Component {
     const {
       titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
     } = this.state;
-    const response = (await getSongViaAutocomplete({
+    const response = (await getSongsBySearchParams({
       titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
     })).data;
     const { numberOfSongs, songs } = response;

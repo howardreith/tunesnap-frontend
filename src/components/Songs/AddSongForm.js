@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { createSong } from '../utils/backend';
+import { createSong } from '../../utils/backend';
 
 class AddSongForm extends Component {
   constructor(props) {

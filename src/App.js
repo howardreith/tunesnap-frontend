@@ -1,20 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-import AddSongForm from './components/AddSongForm';
-import SongTable from './components/SongTable';
-import SongDetails from './components/SongDetails';
+import AddSongForm from './components/Songs/AddSongForm';
+import SongTable from './components/Songs/SongTable';
+import SongDetails from './components/Songs/SongDetails';
 import GlobalNav from './components/GlobalNav';
 import Login from './components/Login';
-import UserContextProvider from './components/UserContextProvider';
+import UserContextProvider from './components/User/UserContextProvider';
 import Register from './components/Register';
-import UserSettings from './components/UserSettings';
-import AccompanimentDetails from './components/AccompanimentDetails';
-import Cart from './components/Cart';
+import UserSettings from './components/User/UserSettings';
+import AccompanimentDetails from './components/Songs/AccompanimentDetails';
+import Cart from './components/User/Cart';
 import ErrorHandler, { ErrorContextProvider } from './components/ErrorHandler';
 import LandingPage from './components/LandingPage';
 import { RouterProvider } from './utils/withRouter';
-import MusicianPage from './components/MusicianPage';
+import MusicianPage from './components/Musician/MusicianPage';
 
 function App() {
   const paypalOptions = {

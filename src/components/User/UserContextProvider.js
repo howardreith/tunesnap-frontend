@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { addAccompanimentToCart, getUserInfo } from '../utils/backend';
+import { addAccompanimentToCart, getUserInfo } from '../../utils/backend';
 
 export const UserContext = React.createContext();
 

@@ -93,6 +93,17 @@ export async function unrequestAccompaniment(songId, token) {
   throw Error(`Song ${JSON.stringify(songId)} could not be unrequested for accompaniment.`);
 }
 
+export async function getRequestedAccompaniments(page = 1, sortByRecency = false) {
+  const result = await fetch(`${backendUrl}/songsByRequest?page=${page}&sortByRecency=${sortByRecency}`, {
+    method: 'get',
+  });
+
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error('getRequestedAccompaniments was unsuccessful');
+}
+
 export async function addAccompaniment(accompanimentData, token) {
   const result = await fetch(`${backendUrl}/accompaniment/create`, {
     method: 'post',
@@ -219,7 +230,7 @@ export async function getSongAtId(id) {
   throw Error(`getSongAtId ${id} was unsuccessful`);
 }
 
-export async function getSongViaAutocomplete({
+export async function getSongsBySearchParams({
   titleSearchValue, composerSearchValue, songSetSearchValue, sortBy, page,
 }) {
   let url = `${backendUrl}/search?sortBy=${sortBy}&page=${page}`;
