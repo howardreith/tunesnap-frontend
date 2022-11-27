@@ -120,6 +120,22 @@ export async function addAccompaniment(accompanimentData, token) {
   throw Error(`Accompaniment ${JSON.stringify(accompanimentData)} could not be created.`);
 }
 
+export async function rateAccompaniment(accompanimentId, rating, token) {
+  const result = await fetch(`${backendUrl}/accompaniment/rate`, {
+    method: 'post',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ accompanimentId, rating }),
+  });
+  if (result.ok) {
+    return result.json();
+  }
+  throw Error(`Accompaniment ${accompanimentId} could not be rated.`);
+}
+
 export async function createSale(saleData, token) {
   const result = await fetch(`${backendUrl}/sale`, {
     method: 'post',

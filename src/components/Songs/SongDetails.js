@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
+  Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button, Rating,
 } from '@mui/material';
 import { getSongAtId, requestAccompaniment, unrequestAccompaniment } from '../../utils/backend';
 import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
@@ -91,7 +91,6 @@ class SongDetails extends Component {
     const { userContext } = this.props;
     const isLoggedIn = !!userContext.email;
     const { cart, accompanimentsOwned, requestedAccompaniments } = userContext;
-    const token = localStorage.getItem('authToken');
     const accompanimentsOwnedIds = accompanimentsOwned.map((acc) => acc.accompaniment);
     const frontEndUrl = process.env.REACT_APP_FRONTEND_URL;
     if (!song) {
@@ -149,7 +148,6 @@ class SongDetails extends Component {
               <TableCell>Link</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Rating</TableCell>
-              {token && <TableCell>Your Rating</TableCell>}
               <TableCell>Cart</TableCell>
             </TableRow>
           </TableHead>
@@ -185,8 +183,14 @@ class SongDetails extends Component {
                       )}
                     </TableCell>
                     <TableCell key={`${accomp._id}-price}`}>{accomp.price === '0' ? 'Free' : accomp.price}</TableCell>
-                    <TableCell key={`${accomp._id}-avgRating}`}>TBD</TableCell>
-                    {token && <TableCell key={`${accomp._id}-userRating}`}>TBD</TableCell>}
+                    <TableCell key={`${accomp._id}-avgRating}`}>
+                      <Rating
+                        name="Average Rating"
+                        value={accomp.averageRating}
+                        onChange={() => {}}
+                        disabled
+                      />
+                    </TableCell>
                     <TableCell key={`${accomp._id}-addToCart`}>
                       {accompanimentIsLocal && accompanimentCostsMoney && accompanimentIsInCart
                       && (

@@ -2,12 +2,11 @@
 
 import React, { Component } from 'react';
 import {
-  Box, Typography, Button,
+  Box, Typography, Button, Rating,
 } from '@mui/material';
-// import { getAccompanimentAtId } from '../utils/backend';
 import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
 import { withUserContext } from '../User/UserContextProvider';
-import { getAccompanimentAtId, getAccompanimentFileAtId } from '../../utils/backend';
+import { getAccompanimentAtId, getAccompanimentFileAtId, rateAccompaniment } from '../../utils/backend';
 import withRouter from '../../utils/withRouter';
 
 class AccompanimentDetails extends Component {
@@ -18,8 +17,11 @@ class AccompanimentDetails extends Component {
     this.updateAccompaniment = this.updateAccompaniment.bind(this);
     this.downloadAccompanimentFile = this.downloadAccompanimentFile.bind(this);
     this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.rateAccompaniment = this.rateAccompaniment.bind(this);
 
-    this.state = { accompaniment: null, accompanimentFile: null };
+    this.state = {
+      accompaniment: null, accompanimentFile: null, userRating: null,
+    };
   }
 
   componentDidMount() {
@@ -69,7 +71,17 @@ class AccompanimentDetails extends Component {
   }
 
   updateAccompaniment(accompaniment) {
-    this.setState({ accompaniment });
+    this.setState({ accompaniment, userRating: accompaniment.userRating });
+  }
+
+  async rateAccompaniment(rating) {
+    const { accompaniment } = this.state;
+    const token = localStorage.getItem('authToken');
+    this.setState({ userRating: rating });
+    const response = await rateAccompaniment(accompaniment._id, rating, token);
+    this.setState((state) => ({
+      ...state, accompaniment: { ...state.accompaniment, averageRating: response.data.averageRating },
+    }));
   }
 
   downloadAccompanimentFile() {
@@ -85,11 +97,15 @@ class AccompanimentDetails extends Component {
   }
 
   render() {
-    const { accompaniment, accompanimentFile, accompanimentFileBlobUrl } = this.state;
+    const {
+      accompaniment, accompanimentFile, accompanimentFileBlobUrl, userRating,
+    } = this.state;
     const { userContext } = this.props;
+    const isLoggedIn = !!userContext.email;
     if (!accompaniment) {
       return <div><span>Loading...</span></div>;
     }
+    const { averageRating } = accompaniment;
     const userOwnsAccompaniment = userContext.accompanimentsOwned
       .map((acc) => acc.accompaniment).includes(accompaniment._id);
     const accompanimentIsFree = accompaniment.price === 0;
@@ -157,6 +173,27 @@ class AccompanimentDetails extends Component {
             <Typography variant="body1">Downloading Audio File...</Typography>
           </Box>
         )}
+        {isLoggedIn && (
+        <Box>
+          <Typography variant="body1">Your Rating</Typography>
+          <Rating
+            name="Your Rating"
+            value={userRating}
+            onChange={(e, newValue) => {
+              this.rateAccompaniment(newValue);
+            }}
+          />
+        </Box>
+        )}
+        <Box>
+          <Typography variant="body1">Average Rating</Typography>
+          <Rating
+            name="Average Rating"
+            value={averageRating}
+            onChange={() => {}}
+            disabled
+          />
+        </Box>
       </Box>
     );
   }
