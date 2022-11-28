@@ -14,6 +14,7 @@ class UserContextProvider extends React.Component {
     this.setCart = this.setCart.bind(this);
     this.updateAccompanimentsOwnedAndCart = this.updateAccompanimentsOwnedAndCart.bind(this);
     this.updateRequestedAccompaniments = this.updateRequestedAccompaniments.bind(this);
+    this.clearUserContextAndDestroyToken = this.clearUserContextAndDestroyToken.bind(this);
 
     this.state = {
       email: '',
@@ -89,6 +90,20 @@ class UserContextProvider extends React.Component {
     this.setState({ accompanimentSubmissions, accompanimentsOwned });
   }
 
+  clearUserContextAndDestroyToken() {
+    localStorage.removeItem('authToken');
+    this.setState({
+      email: '',
+      displayName: '',
+      accompanimentSubmissions: [],
+      favoriteSongs: [],
+      favoriteAccompaniments: [],
+      cart: [],
+      accompanimentsOwned: [],
+      requestedAccompaniments: [],
+    });
+  }
+
   render() {
     const { children } = this.props;
     return (
@@ -101,6 +116,7 @@ class UserContextProvider extends React.Component {
         setCart: this.setCart,
         updateAccompanimentsOwnedAndCart: this.updateAccompanimentsOwnedAndCart,
         updateRequestedAccompaniments: this.updateRequestedAccompaniments,
+        clearUserContextAndDestroyToken: this.clearUserContextAndDestroyToken,
       }}
       >
         {children}

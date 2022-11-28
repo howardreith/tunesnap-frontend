@@ -4,7 +4,8 @@ import {
   AppBar, Toolbar, Button, Box,
 } from '@mui/material';
 import withRouter from '../utils/withRouter';
-import { HistoryPropType } from '../utils/propTypes';
+import { HistoryPropType, UserContextPropType } from '../utils/propTypes';
+import { withUserContext } from './User/UserContextProvider';
 
 class GlobalNav extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class GlobalNav extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.handleUserSettingsClick = this.handleUserSettingsClick.bind(this);
     this.handleCartClick = this.handleCartClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
 
     this.state = { };
   }
@@ -56,6 +58,14 @@ class GlobalNav extends Component {
     navigate('/cart');
   }
 
+  handleLogoutClick() {
+    const { history, userContext } = this.props;
+    const { clearUserContextAndDestroyToken } = userContext;
+    const { navigate } = history;
+    clearUserContextAndDestroyToken();
+    navigate('/logout');
+  }
+
   render() {
     const token = localStorage.getItem('authToken');
     return (
@@ -86,6 +96,9 @@ class GlobalNav extends Component {
                 <Box margin={1}>
                   <Button type="button" variant="contained" onClick={this.handleCartClick}>Cart</Button>
                 </Box>
+                <Box margin={1}>
+                  <Button type="button" variant="contained" onClick={this.handleLogoutClick}>Log Out</Button>
+                </Box>
               </>
             )}
           </Box>
@@ -95,8 +108,9 @@ class GlobalNav extends Component {
   }
 }
 
-export default withRouter(GlobalNav);
+export default withRouter(withUserContext(GlobalNav));
 
 GlobalNav.propTypes = {
   history: HistoryPropType.isRequired,
+  userContext: UserContextPropType.isRequired,
 };

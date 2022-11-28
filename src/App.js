@@ -15,6 +15,7 @@ import ErrorHandler, { ErrorContextProvider } from './components/ErrorHandler';
 import LandingPage from './components/LandingPage';
 import { RouterProvider } from './utils/withRouter';
 import MusicianPage from './components/Musician/MusicianPage';
+import LoggedOutPage from './components/LoggedOutPage';
 
 function App() {
   const paypalOptions = {
@@ -47,6 +48,7 @@ function App() {
                   <Route path="/accompaniments/:id" element={<AccompanimentDetails />} />
                   <Route exact path="/settings" element={<UserSettings />} />
                   <Route exact path="/cart" element={<Cart />} />
+                  <Route exact path="/logout" element={<LoggedOutPage />} />
                 </Routes>
               </RouterProvider>
             </BrowserRouter>

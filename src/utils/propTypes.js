@@ -10,6 +10,7 @@ export const HistoryPropType = PropTypes.shape({
 export const UserContextPropType = PropTypes.shape({
   email: PropTypes.string,
   setUserInfo: PropTypes.func.isRequired,
+  clearUserContextAndDestroyToken: PropTypes.func.isRequired,
 });
 
 export const ErrorContextPropType = PropTypes.shape({
