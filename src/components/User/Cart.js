@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {
   Box, Table, TableHead, TableRow, TableCell, TableBody, Typography, Button,
 } from '@mui/material';
-import { PayPalButtons } from '@paypal/react-paypal-js';
 import { createSale, getCart, removeAccompanimentFromCart } from '../../utils/backend';
 import { HistoryPropType, UserContextPropType } from '../../utils/propTypes';
 import { withUserContext } from './UserContextProvider';
@@ -15,7 +14,6 @@ class Cart extends Component {
     super(props);
 
     this.removeAccompanimentFromCart = this.removeAccompanimentFromCart.bind(this);
-    this.handlePaypalApprove = this.handlePaypalApprove.bind(this);
 
     this.state = { cartContents: [], saleId: null };
   }
@@ -26,32 +24,20 @@ class Cart extends Component {
     this.setState({ cartContents });
   }
 
-  async handlePaypalApprove(_, actions) {
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  async handleFinalizeSale() {
     const token = localStorage.getItem('authToken');
-    actions.order.capture().then((details) => {
-      const { cartContents } = this.state;
-      const saleDetails = {
-        accompanimentsSold: cartContents.map((accomp) => ({ id: accomp._id, pricePaid: accomp.price })),
-        paypalOrderId: details.id,
-        paypalOrderStatus: details.status,
-        paypalCreateTime: details.create_time,
-        paypalPayerEmailAddress: details.payer.email_address,
-        paypalPayerId: details.payer.payer_id,
-        paypalPayeeEmailAddress: details.purchase_units[0].payee.email_address,
-        paypalPayeeId: details.purchase_units[0].payee.merchant_id,
-        currency: details.purchase_units[0].amount.currency_code,
-        totalPrice: Number(details.purchase_units[0].amount.value),
-      };
-      createSale(saleDetails, token).then((saleSuccessRes) => {
-        const { userContext: { updateAccompanimentsOwnedAndCart } } = this.props;
-        const { data: { accompanimentsOwned, saleId } } = saleSuccessRes;
-        updateAccompanimentsOwnedAndCart({ cart: [], accompanimentsOwned });
-        this.setState({ cartContents: [], saleId });
-      });
-    })
-      .catch((e) => {
-        console.error('There was an error in processing this sale', e);
-      });
+    const { cartContents } = this.state;
+    const saleDetails = {
+      accompanimentsSold: cartContents.map((accomp) => ({ id: accomp._id, pricePaid: accomp.price })),
+    };
+
+    createSale(saleDetails, token).then((saleSuccessRes) => {
+      const { userContext: { updateAccompanimentsOwnedAndCart } } = this.props;
+      const { data: { accompanimentsOwned, saleId } } = saleSuccessRes;
+      updateAccompanimentsOwnedAndCart({ cart: [], accompanimentsOwned });
+      this.setState({ cartContents: [], saleId });
+    });
   }
 
   async removeAccompanimentFromCart(accompanimentId) {
@@ -125,20 +111,6 @@ class Cart extends Component {
           </TableBody>
         </Table>
         <Typography variant="h5">{`Total: $${total}`}</Typography>
-        {Number(total) > 0 && (
-        <PayPalButtons
-          createOrder={(data, actions) => actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: total.toFixed(2),
-                },
-              },
-            ],
-          })}
-          onApprove={this.handlePaypalApprove}
-        />
-        )}
       </Box>
     );
   }
