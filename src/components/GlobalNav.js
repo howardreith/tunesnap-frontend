@@ -18,6 +18,8 @@ class GlobalNav extends Component {
     this.handleUserSettingsClick = this.handleUserSettingsClick.bind(this);
     this.handleCartClick = this.handleCartClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.handleGoToTableClick = this.handleGoToTableClick.bind(this);
+    this.handleGoToMusicianPage = this.handleGoToMusicianPage.bind(this);
 
     this.state = { };
   }
@@ -66,8 +68,21 @@ class GlobalNav extends Component {
     navigate('/logout');
   }
 
+  handleGoToTableClick() {
+    const { history } = this.props;
+    history.navigate('/songs');
+  }
+
+  handleGoToMusicianPage() {
+    const { history } = this.props;
+    history.navigate('/musician');
+  }
+
   render() {
     const token = localStorage.getItem('authToken');
+    const { history } = this.props;
+    const { location } = history;
+    const { pathname } = location;
     return (
       <AppBar position="static">
         <Toolbar>
@@ -78,6 +93,26 @@ class GlobalNav extends Component {
             <Box margin={1}>
               <Button type="button" variant="contained" onClick={this.handleBackClick}>Back</Button>
             </Box>
+            { pathname.includes('songs') && (
+              <Box margin={1}>
+                <Button
+                  onClick={this.handleGoToMusicianPage}
+                  variant="contained"
+                >
+                  Musician Dashboard
+                </Button>
+              </Box>
+            )}
+            { pathname.includes('musician') && (
+              <Box margin={1}>
+                <Button
+                  onClick={this.handleGoToTableClick}
+                  variant="contained"
+                >
+                  Search
+                </Button>
+              </Box>
+            )}
             { !token && (
             <>
               <Box marginLeft="auto" margin={1}>

@@ -1,23 +1,14 @@
-import React from 'react';
-import { Box, Button } from '@mui/material';
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect } from 'react';
 import withRouter from '../utils/withRouter';
 import { HistoryPropType } from '../utils/propTypes';
 
 function LandingPage({ history }) {
-  const handleGoToTableClick = () => {
+  useEffect(() => {
     history.navigate('/songs');
-  };
+  });
 
-  const handleGoToMusicianPage = () => {
-    history.navigate('/musician');
-  };
-
-  return (
-    <Box>
-      <Button onClick={handleGoToTableClick} variant="contained">Search Songs and Accompaniments</Button>
-      <Button onClick={handleGoToMusicianPage} variant="contained">I am an accompanist</Button>
-    </Box>
-  );
+  return null;
 }
 
 LandingPage.propTypes = {
